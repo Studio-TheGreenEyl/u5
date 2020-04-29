@@ -1,8 +1,14 @@
 [![](https://img.shields.io/badge/using-Processing-brightgreen.svg?style=flat-square&color=000000)](http://processing.org/)
 
 # U5
-##Bahnhof der Wissenschaft
+##B ahnhof der Wissenschaft
 something, something BVG.
+
+## Geomerative resources
+For this project I am heavily relying on the Geomerative library by Richard Marxer (http://www.ricardmarxer.com/geomerative/).
+What is mostly happening here, is that I importing a SVG 1.0 conformed file that was exported from Adobe Illustrator
+http://louisc.co.uk/?p=2657
+http://louisc.co.uk/?p=2686
 
 ## To-Do
 - [x] run on P2D for permance
