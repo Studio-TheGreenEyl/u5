@@ -1,0 +1,22 @@
+{
+  "play": true,
+  "rotate": false,
+  "fileName": "Comp 30000.png",
+  "debug": false,
+  "invert": false,
+  "originX": 0,
+  "linePixelPitch": 9,
+  "deployed": true,
+  "draw": true,
+  "sliderBrightness": 255,
+  "offline": true,
+  "redraw": true,
+  "frameRate": 60,
+  "MANIFEST_HEIGHT": 262,
+  "introDuration": 0,
+  "introAmount": 0,
+  "MANIFEST_WIDTH": 720,
+  "lastModification": "30.3.2019, 14:24:4",
+  "state": 0,
+  "flip": true
+}
