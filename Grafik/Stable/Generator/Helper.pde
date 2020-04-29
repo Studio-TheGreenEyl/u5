@@ -2,6 +2,7 @@ import controlP5.*;
 
 ControlP5 cp5; 
 ArrayList<Tracer> tracers = new ArrayList<Tracer>();
+String[][] clusters;
 Importer importer; // overlays, backgrounds, texts
 
 PGraphics buffer;
@@ -16,9 +17,16 @@ int currentTracer = 0;
 
 int menuHeight = 30;
 
+// fonts
+PFont myFont[] = new PFont[9];
+String fontname = "Theinhardt";
+String suffix = "Ita";
+float fontSize = 40;
+
 void keyPressed() {
   if (key == CODED) {
     if (keyCode == UP) {
+      export();
       //current++;
       //if(current >= tracer.getPathCount()) current = tracer.getPathCount()-1;
     } else if (keyCode == DOWN) {
@@ -62,30 +70,54 @@ void init() {
   surface.setLocation(0, 0);
   
   
-  float[] aspect = calculateAspectRatioFit(overlay.width, overlay.height, 1400, 1400);
+  float[] aspect = calculateAspectRatioFit(overlay.width, overlay.height, 2200, 2200);
   surface.setSize((int)aspect[0], (int)aspect[1]+menuHeight);
   surface.setResizable(true);
   
-  buffer = createGraphics(overlay.width, overlay.height);
+  buffer = createGraphics(overlay.width, overlay.height, P3D);
   //importer = new Importer[3];
   
   //importer[1] = new Importer("data/backgrounds");
   //importer[2] = new Importer("data/text");
   
+  myFont[0] = createFont(fontname+"-Hairline"+suffix, fontSize);
+  myFont[1] = createFont(fontname+"-Ultralight"+suffix, fontSize);
+  myFont[2] = createFont(fontname+"-Thin"+suffix, fontSize);
+  myFont[3] = createFont(fontname+"-Light"+suffix, fontSize);
+  myFont[4] = createFont(fontname+"-Regular"+suffix, fontSize);
+  myFont[5] = createFont(fontname+"-Medium"+suffix, fontSize);
+  myFont[6] = createFont(fontname+"-Bold"+suffix, fontSize);
+  myFont[7] = createFont(fontname+"-Heavy"+suffix, fontSize);
+  myFont[8] = createFont(fontname+"-Black"+suffix, fontSize);
   
+  textFont(myFont[4]);
+  textSize(fontSize);
+  
+  buffer.textFont(myFont[4]);
+  buffer.textSize(fontSize);
   
   
 
 }
 
+void export() {
+  buffer.save("export/######.svg");
+}
+
 void showOverlay() {
   if(showOverlay) {
-    buffer.beginDraw();
-    buffer.push();
-    buffer.blendMode(LIGHTEST);
-    buffer.image(overlay, 0, 0);
-    buffer.pop();
-    buffer.endDraw();
+    //buffer.beginDraw();
+    //buffer.push();
+    //buffer.blendMode(LIGHTEST);
+    //buffer.image(overlay, 0, 0);
+    
+    push();
+    blendMode(LIGHTEST);
+    image(overlay, 0, menuHeight, width, height-menuHeight);
+    pop();
+    
+    //buffer.pop();
+    //buffer.endDraw();
   }
 }
 
@@ -111,6 +143,16 @@ void initList() {
     l.add(split[split.length-1]);
   }
   cp5.get(ScrollableList.class, "backgroundList").addItems(l);
+  
+  importer.loadFiles("text");
+  if(importer.getFiles().size() > 0) {
+    clusters = new String[importer.getFiles().size()][];
+    for(int i = 0; i<importer.getFiles().size(); i++) {
+      clusters[i] = loadStrings(importer.getFiles().get(i));
+    }
+  }
+  
+  
 }
   
 float[] calculateAspectRatioFit(float srcWidth, float srcHeight, float maxWidth, float maxHeight) {

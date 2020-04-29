@@ -5,27 +5,33 @@ class Path {
   RPoint[] coords;
   ArrayList<Textblock> blocks = new ArrayList<Textblock>();
   int cluster = 0; // Welche textdatei
-  float startRotation = 0;
-  float endRatoation = 0;
+  int clusterStep = 0;
+  int startRotation = 0;
+  int endRotation = (int)random(180);
   float startScale = 0;
   float endScale = 0;
   float strokeWeight = 1;
   int spacing = 0;
-  float offsetRotation = 0;
-  
+  float offsetRotation = 0;  
   
   Path(RPoint[] _c, int _spacing) {
     coords = _c;
     spacing = _spacing;
     init();
+    clusterStep = (int)random(clusters[clusterStep].length-1);
+    println("Path created");
   }
   
   void init() {
     
     for(int i = 0; i<coords.length; i++) {
-      PVector p = new PVector(coords[i].x, coords[i].y);
+      //PVector p = new PVector(coords[i].x, coords[i].y);
       //println(p);
-      blocks.add(new Textblock(p));
+      
+    }
+    
+    for(int i = 0; i<clusters[cluster].length; i++) {
+      blocks.add(new Textblock(clusters[cluster][i]));
     }
     
     // calc atan2
@@ -39,9 +45,17 @@ class Path {
     }
   }
   
+  //Simple function to calculate the angle between two points
+  float getAngle(RPoint p1, RPoint p2){
+    float deltax = p1.x - p2.x;
+    float deltay= p1.y - p2.y;
+    return atan(deltay/deltax);
+  }
+  
   void update() {
   }
-  void display() {
+  
+  void displayTextblock() {
     if(blocks.size() > 0) {
       
       for(int i = 0; i<blocks.size(); i++) {
@@ -51,6 +65,41 @@ class Path {
           buffer.rectMode(CENTER);
           blocks.get(i).display();
         //}
+      }
+    }
+  }
+  
+  void displayCharacters() {
+    if(blocks.size() > 0) {
+      
+      int characterStep = 0;
+      for(int i = 0; i<coords.length; i++) {
+        PVector p = new PVector(coords[i].x, coords[i].y);
+        Textblock b = blocks.get(clusterStep);
+        int l = b.getLength();
+        buffer.push();
+        if(l > 0) {
+          char c = b.getCharacter(characterStep);
+          if(i < coords.length - 1) {
+            RPoint center = new RCommand(coords[i], coords[i+1]).getCenter();
+            buffer.translate(center.x, center.y);
+          } else buffer.translate(p.x, p.y);
+          float r = map(i, 0, coords.length, startRotation, endRotation);
+          buffer.rotateX(radians(int(r)));
+          if(i < coords.length - 1) {
+            
+            buffer.rotateZ(getAngle(coords[i], coords[i+1 % coords.length]));
+          }
+
+          buffer.text(c, 0, 0);
+          characterStep++;
+          if(characterStep >= l) {
+            characterStep = 0;
+          }
+        }
+        buffer.pop();
+        //clusterStep++;
+        //clusterStep %= blocks.size();
       }
     }
   }
@@ -71,9 +120,11 @@ class Textblock {
   float scale;
   float tilt;
   String text;
-  Textblock(PVector _p) {
-    p = _p;
-    text = "W";
+  float tracking;
+  Textblock(String s) {
+    //p = _p;
+    p = new PVector(0, 0);
+    text = s;
   }
   
   void update() {
@@ -104,7 +155,8 @@ class Textblock {
   }
   
   char getCharacter(int index) {
-    return text.charAt(index);
+    if(index >= getLength()) return ' '; 
+    else return text.charAt(index);
   }
   
 }

@@ -20,8 +20,9 @@ void draw() {
     tracers.get(currentTracer).displayAll();
     
     // OVERLAY
-    showOverlay();
+    
     image(buffer, 0, menuHeight, width, height-menuHeight);
+    showOverlay();
     push();
     fill(255);
     rect(0, 0, width, menuHeight);

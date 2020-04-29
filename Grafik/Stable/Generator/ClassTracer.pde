@@ -10,21 +10,24 @@ class Tracer {
   long interval = 5000;
   
   Tracer(String filename) {
+    println("Created a Tracer");
     grp = RG.loadShape(filename);
     //grp.centerIn(g, 100, 1, 1);
     pointPaths = grp.getPointsInPaths();
     initPaths();
     timestamp = millis();
+    
   }
   
   void initPaths() {
     if(getPathCount() > 0) {
       for(int i = 0; i<getPathCount(); i++) {
         if(pointPaths[i] != null) {
-          for(int j = 0; j<getPath(i).length; j++){
+          //for(int j = 0; j<getPath(i).length; j++){
             //PVector p = new PVector(getPath(i)[j].x, getPath(i)[j].y);
             paths.add(new Path(getPath(i), spacing));
-          }
+            // zuviele paths
+          //}
         }
       }
     }
@@ -40,7 +43,8 @@ class Tracer {
     //}
   } 
   void displayTrace(int current) {
-    paths.get(current).display();
+    // method 1 paths.get(current).displayTextblock();
+    paths.get(current).displayCharacters();
   }
   
   // Debug Ansicht
