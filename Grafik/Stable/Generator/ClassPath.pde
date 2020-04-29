@@ -13,6 +13,7 @@ class Path {
   int spacing = 0;
   float offsetRotation = 0;
   
+  
   Path(RPoint[] _c, int _spacing) {
     coords = _c;
     spacing = _spacing;
@@ -44,12 +45,12 @@ class Path {
     if(blocks.size() > 0) {
       
       for(int i = 0; i<blocks.size(); i++) {
-        if(i % spacing == 0) {
+        //if(i % spacing == 0) {
           buffer.stroke(255);
           buffer.noFill();
           buffer.rectMode(CENTER);
           blocks.get(i).display();
-        }
+        //}
       }
     }
   }
@@ -69,8 +70,10 @@ class Textblock {
   float rotation;
   float scale;
   float tilt;
+  String text;
   Textblock(PVector _p) {
     p = _p;
+    text = "W";
   }
   
   void update() {
@@ -83,7 +86,7 @@ class Textblock {
     //buffer.ellipse(0, 0, 3, 3);
     
     buffer.rotate(rotation);
-    buffer.text("Test", 0, 0);
+    buffer.text(text, 0, 0);
     //buffer.rect(0, 0, 20, 8);
     buffer.pop();
   }
@@ -94,6 +97,14 @@ class Textblock {
   
   PVector getPosition() {
     return p;
+  }
+  
+  int getLength() {
+    return text.length();
+  }
+  
+  char getCharacter(int index) {
+    return text.charAt(index);
   }
   
 }

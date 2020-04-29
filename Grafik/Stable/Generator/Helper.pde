@@ -36,6 +36,7 @@ void init() {
   RG.ignoreStyles(ignoringStyles);
   //RG.setPolygonizer(RG.ADAPTATIVE);
   RG.setPolygonizer(RG.UNIFORMLENGTH);
+  RG.setPolygonizerLength(10);
   //RG.setPolygonizer(RG.UNIFORMSTEP);
   importer = new Importer("data");
   

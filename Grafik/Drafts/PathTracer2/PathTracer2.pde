@@ -10,6 +10,7 @@ void setup() {
   //RG.setPolygonizer(RG.ADAPTATIVE);
   RG.setPolygonizer(RG.UNIFORMLENGTH);
   //RG.setPolygonizer(RG.UNIFORMSTEP);
+  RG.setPolygonizerLength(50);
   
   tracer = new Tracer("testPfad.svg");
   surface.setLocation(0, 0);
