@@ -6,7 +6,7 @@ something, something BVG.
 
 ## Geomerative resources
 For this project I am heavily relying on the Geomerative library by Richard Marxer (http://www.ricardmarxer.com/geomerative/).
-What is mostly happening here, is that I importing a SVG 1.0 conformed file that was exported from Adobe Illustrator
+What is mostly happening here, is that I am importing a SVG 1.0 conformed file that was exported from Adobe Illustrator
 http://louisc.co.uk/?p=2657
 http://louisc.co.uk/?p=2686
 
