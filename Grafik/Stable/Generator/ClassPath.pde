@@ -8,6 +8,8 @@ class Path {
   int clusterStep = 0;
   int[] rX = new int[2];
   int[] rY = new int[2];
+  float[] fontSize = new float[2];
+  
   
   float startScale = 0;
   float endScale = 0;
@@ -203,7 +205,8 @@ class Path {
           
           float xR = map(i, 0, coords.length, rX[0], rX[1]);
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
-          float size = map(i, 0, coords.length, 0.0, 0.6);
+          //float size = map(i, 0, coords.length, 0.0, 0.6);
+          float size = map(i, 0, coords.length, fontSize[0], fontSize[1]);
           buffer.rotateX(radians(int(xR)));
           buffer.rotateY(radians(int(yR)));
           if(i < coords.length - 1) {
@@ -247,6 +250,14 @@ class Path {
     */
     rY[0] = (int)a;
     rY[1] = (int)b;
+  }
+  
+  void setFontSize(float a, float b) {
+    /*rX[0] = (int)map(a, 0f, 1f, 0, 360);
+    rX[1] = (int)map(b, 0f, 1f, 0, 360);
+    */
+    fontSize[0] = a;
+    fontSize[1] = b;
   }
   
   RPoint[] getCoords() {

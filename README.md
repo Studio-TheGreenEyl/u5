@@ -30,5 +30,5 @@ http://louisc.co.uk/?p=2686
 - [ ] Drag & Drop (SDrop) ?
 - [ ] Change text positions (???)
 - [ ] Text width
-- [ ] deactivate overlay
+- [x] deactivate overlay
 - [ ] output name: date + time + iterator

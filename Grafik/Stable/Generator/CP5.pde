@@ -17,6 +17,7 @@ ScrollableList pathList;
 
 Range rangeRotationX;
 Range rangeRotationZ;
+Range rangeFontSize;
 
 
 void constructGUI() {
@@ -163,6 +164,21 @@ void constructGUI() {
      .setColorForeground(color(255,40))
      .setColorBackground(color(255,40))  
      ;
+     /*
+  rangeFontSize = cp5.addRange("rangeFontSize")
+     // disable broadcasting since setRange and setRangeValues will trigger an event
+     .setBroadcast(false) 
+     .setPosition(880,5)
+     .setSize(200,10)
+     .setHandleSize(10)
+     .setRange(0.0f,1.0f)
+     .setRangeValues(0.0f,1.0f)
+     // after the initialization we turn broadcast back on again
+     .setBroadcast(true)
+     .setColorForeground(color(255,255,0))
+     .setColorBackground(color(255,40))  
+     ; 
+     */
 
   overlayList = cp5.addScrollableList("overlayList")
     .setPosition(5, 5)
@@ -266,6 +282,14 @@ void controlEvent(ControlEvent theControlEvent) {
     float a = int(theControlEvent.getController().getArrayValue(0));
     float b = int(theControlEvent.getController().getArrayValue(1));
     tracers.get(currentTracer).getCurrentPath().setRotationY(a, b);
+    //println("rangeRotationY ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
+  } else if(theControlEvent.isFrom("rangeFontSize")) {
+    // min and max values are stored in an array.
+    // access this array with controller().arrayValue().
+    // min is at index 0, max is at index 1.
+    float a = int(theControlEvent.getController().getArrayValue(0));
+    float b = int(theControlEvent.getController().getArrayValue(1));
+    tracers.get(currentTracer).getCurrentPath().setFontSize(a, b);
     //println("rangeRotationY ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
   }
   

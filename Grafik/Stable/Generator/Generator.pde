@@ -12,6 +12,7 @@ um parameter anpassen zu können
 
 void setup() {
   size(900, 900, P3D);
+  pixelDensity(2);
   init();
 }
 
