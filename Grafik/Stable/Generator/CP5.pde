@@ -5,7 +5,7 @@ Textlabel stateLabel;
 Textlabel frameRateLabel;
 Textlabel inputLabel;
 Textlabel brightnessInPercLabel;
-CheckBox playCheckbox;
+CheckBox showOverlayCheckbox;
 CheckBox offlineCheckbox;
 CheckBox rotateCheckbox;
 CheckBox redrawCheckbox;
@@ -70,9 +70,10 @@ void constructGUI() {
    ;
    
    stateTitle = cp5.addTextlabel("label1")
-   .setText("Current state: ")
-   .setPosition(10, 10)
+   .setText("Overlay: ")
+   .setPosition(320, 5)
    ;
+   
    stateLabel = cp5.addTextlabel("label2")
    .setText("A single ControlP5 textlabel")
    .setPosition(70, 10)
@@ -94,11 +95,12 @@ void constructGUI() {
    
    
    
-   playCheckbox = cp5.addCheckBox("playCheckbox")
-   .setPosition(14, 30)
-   .setSize(32, 8)
+   showOverlayCheckbox = cp5.addCheckBox("showOverlayCheckbox")
+   .setPosition(340, 5)
+   .setSize(32, 16)
    .addItem("play", 1)
    ;
+   
    offlineCheckbox = cp5.addCheckBox("offlineCheckbox")
    .setPosition(14, 40)
    .setSize(32, 8)
@@ -210,12 +212,19 @@ void constructGUI() {
 void overlayList(int n) {
   String s = (String)cp5.get(ScrollableList.class, "overlayList").getItem(n).get("text");
   // check if this is a valid image?
-
-  if (s.length() > 0) overlay = loadImage(importer.getFiles().get(n));
-  else println("[#] ERROR : the image is not valid. string size is low or equal than 0");
-  refresh = true;
-  
-  println("currentTracer = " + n);
+  try {
+    if (s.length() > 0) {
+      if(s.equals("empty")) {
+        showOverlay = false;
+      } else {
+        showOverlay = true;
+        overlay = loadImage(importer.getFiles().get(n));
+      }
+    } else println("[#] ERROR : the image is not valid. string size is low or equal than 0");
+    refresh = true;
+  } catch(Exception e) {
+  }
+  //println("currentTracer = " + n);
 }
 
 void backgroundList(int n) {

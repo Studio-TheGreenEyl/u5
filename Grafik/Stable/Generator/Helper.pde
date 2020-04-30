@@ -1,5 +1,3 @@
-
-
 int setWidth = 6200;
 int setHeight = 1800;
 
@@ -157,6 +155,7 @@ void initList() {
 
   importer.loadFiles("overlays");
   l = new ArrayList();
+  l.add("empty");
   for (int i = 0; i<importer.getFiles().size(); i++) {
     String s = importer.getFiles().get(i);
     String[] split = split(s, "/");
