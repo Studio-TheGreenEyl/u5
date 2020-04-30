@@ -22,8 +22,8 @@ Range rangeRotationZ;
 void constructGUI() {
   // change the original colors
   color black = color(0, 0, 0);
-  color white = color(0, 0, 255);
-  color gray = color(0, 0, 125);
+  color white = color(255, 255, 255);
+  color gray = color(125, 125, 125);
   cp5.setAutoDraw(cp5AutoDraw);
   /*
   cp5.addSlider("sliderBrightness")
@@ -249,7 +249,7 @@ void controlEvent(ControlEvent theControlEvent) {
     float a = int(theControlEvent.getController().getArrayValue(0));
     float b = int(theControlEvent.getController().getArrayValue(1));
     tracers.get(currentTracer).getCurrentPath().setRotationX(a, b);
-    println("rangeRotationX ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
+    //println("rangeRotationX ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
   } else if(theControlEvent.isFrom("rangeRotationY")) {
     // min and max values are stored in an array.
     // access this array with controller().arrayValue().
@@ -257,7 +257,7 @@ void controlEvent(ControlEvent theControlEvent) {
     float a = int(theControlEvent.getController().getArrayValue(0));
     float b = int(theControlEvent.getController().getArrayValue(1));
     tracers.get(currentTracer).getCurrentPath().setRotationY(a, b);
-    println("rangeRotationY ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
+    //println("rangeRotationY ( "+ a +" / "+ b +" )on path " + currentPath + " update, done.");
   }
   
 }

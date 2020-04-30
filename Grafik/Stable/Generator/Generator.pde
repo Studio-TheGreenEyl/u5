@@ -27,7 +27,26 @@ void draw() {
     //buffer.dispose();
     
     // OVERLAY
-    image(buffer, 0, menuHeight, width, height-menuHeight);      
+    image(buffer, 0, menuHeight, width, height-menuHeight);
+    
+    // show active path
+    if(tracers.get(currentTracer).getCurrentPath().getCoords().length > 0) {
+      active.beginDraw();
+      active.clear();
+      active.strokeWeight(4);
+      active.push();
+      active.beginShape();
+      active.stroke(255, 255, 0);
+      active.noFill();
+      for(int i = 0; i<tracers.get(currentTracer).getCurrentPath().getCoords().length; i++) {
+        PVector p = new PVector(tracers.get(currentTracer).getCurrentPath().getCoords()[i].x, tracers.get(currentTracer).getCurrentPath().getCoords()[i].y);
+        active.vertex(p.x, p.y); 
+      }
+      active.endShape();
+      active.pop();
+      active.endDraw();
+      image(active, 0, menuHeight, width, height-menuHeight);
+    }
     showOverlay();
     push();
     fill(255);

@@ -9,6 +9,7 @@ String[][] clusters;
 Importer importer; // overlays, backgrounds, texts
 
 PGraphics buffer;
+PGraphics active;
 PImage overlay;
 
 // boolean section
@@ -89,6 +90,7 @@ void init() {
   surface.setResizable(true);
   
   buffer = createGraphics(setWidth, setHeight, P3D);
+  active = createGraphics(setWidth, setHeight, P2D);
   
   //buffer = createGraphics(overlay.width, overlay.height, SVG, "export/output.svg");
   //importer = new Importer[3];

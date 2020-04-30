@@ -249,6 +249,10 @@ class Path {
     rY[1] = (int)b;
   }
   
+  RPoint[] getCoords() {
+    return coords;
+  }
+  
 }
 
 class Textblock {
