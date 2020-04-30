@@ -125,7 +125,7 @@ void init() {
 void export() {
   if (readyToGo) {
     String date = year() +""+ nf(month(), 2) +""+ nf(day(), 2) +"_"+ nf(hour(), 2) +""+ nf(minute(), 2) +""+ nf(second(), 2);
-    String fn = "output_"+ date +"_"+exportFrame +".png";
+    String fn = "output_"+ date +"_"+ nf(exportFrame, 5) +".png";
     buffer.save("export/"+ fn);
     exportFrame++;
     println("Export: export/"+ fn);
