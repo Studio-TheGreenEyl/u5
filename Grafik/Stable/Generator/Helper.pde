@@ -18,6 +18,7 @@ boolean cp5AutoDraw = true;
 boolean refresh = true;
 boolean export = false;
 int currentTracer = 0;
+int currentPath = 0;
 boolean readyToGo = false;
 
 int menuHeight = 30;
@@ -173,8 +174,14 @@ void initList() {
   } 
 }
 
+
+void cleanCurrentPathList(int currentTracer) {
+  //for(int i = 0; i<tracers.get(currentTracer).getPathCount(); i++) {
+    //String n = println(cp5.get(ScrollableList.class, "pathList").getItem(i));    
+  //}
+  cp5.get(ScrollableList.class, "pathList").clear();
+}
 void initCurrentPathList(int currentTracer) {
-  
   List l = new ArrayList();
   for(int i = 0; i<tracers.get(currentTracer).getPathCount(); i++) {
     l.add("path " + i);

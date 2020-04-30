@@ -25,10 +25,10 @@ class Path {
     init();
     clusterStep = (int)random(clusters[clusterStep].length-1);
     println("Path created");
-    rX[0] = (int)random(-45);
-    rX[1] = (int)random(45);
-    rY[0] = (int)random(-33);
-    rY[1] = (int)random(33);
+    rX[0] = 0;
+    rX[1] = 0;
+    rY[0] = 0;
+    rY[1] = 0;
     IntList order = new IntList();
     for(int i = 0; i<blocks.size(); i++) order.append(i);
     order.shuffle();
@@ -205,7 +205,7 @@ class Path {
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
           float size = map(i, 0, coords.length, 0.0, 0.6);
           buffer.rotateX(radians(int(xR)));
-          //buffer.rotateY(radians(int(yR)));
+          buffer.rotateY(radians(int(yR)));
           if(i < coords.length - 1) {
             buffer.rotateZ(getAngle(coords[i], coords[i+1]));
           }
@@ -231,6 +231,22 @@ class Path {
   
   void inactive() {
     strokeWeight = 1;
+  }
+  
+  void setRotationX(float a, float b) {
+    /*rX[0] = (int)map(a, 0f, 1f, 0, 360);
+    rX[1] = (int)map(b, 0f, 1f, 0, 360);
+    */
+    rX[0] = (int)a;
+    rX[1] = (int)b;
+  }
+  
+  void setRotationY(float a, float b) {
+    /*rX[0] = (int)map(a, 0f, 1f, 0, 360);
+    rX[1] = (int)map(b, 0f, 1f, 0, 360);
+    */
+    rY[0] = (int)a;
+    rY[1] = (int)b;
   }
   
 }

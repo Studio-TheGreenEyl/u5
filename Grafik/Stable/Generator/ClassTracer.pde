@@ -85,5 +85,9 @@ class Tracer {
   RPoint[] getPath(int i) {
     return pointPaths[i];
   }
+  
+  Path getCurrentPath() {
+    return paths.get(currentPath);
+  }
 
 }
