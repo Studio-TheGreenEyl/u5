@@ -10,6 +10,7 @@ CheckBox redrawCheckbox;
 CheckBox invertCheckbox;
 ScrollableList overlayList;
 ScrollableList backgroundList;
+ScrollableList pathList;
 //ScrollableList textList;
 
 
@@ -113,12 +114,14 @@ void constructGUI() {
    .setSize(32, 8)
    .addItem("invert", 1)
    ;
-   cp5.addButton("prevDemo")
+   */
+   cp5.addButton("exportButton")
    .setValue(0)
-   .setLabel("prev")
-   .setPosition(14, 80)
-   .setSize(32, 16)
+   .setLabel("Export")
+   .setPosition(400, 5)
+   .setSize(40, 16)
    ;
+   /*
    cp5.addButton("nextDemo")
    .setValue(0)
    .setLabel("next")
@@ -142,6 +145,14 @@ void constructGUI() {
     .setItemHeight(20)
     .setType(ControlP5.LIST)
     .setLabel("Backgrounds")
+    ;
+  pathList = cp5.addScrollableList("pathList")
+    .setPosition(213, 5)
+    .setSize(100, 400)
+    .setBarHeight(20)
+    .setItemHeight(20)
+    .setType(ControlP5.LIST)
+    .setLabel("Paths")
     ;
 
   checkImageDropdown();
@@ -171,12 +182,15 @@ void overlayList(int n) {
   if (s.length() > 0) overlay = loadImage(importer.getFiles().get(n));
   else println("[#] ERROR : the image is not valid. string size is low or equal than 0");
   refresh = true;
+  
+  println("currentTracer = " + n);
 }
 
 void backgroundList(int n) {
   String s = (String)cp5.get(ScrollableList.class, "backgroundList").getItem(n).get("text");
   // check if this is a valid image?
   currentTracer = n;
+  initCurrentPathList(currentTracer);
   refresh = true;
 }
 
@@ -187,4 +201,8 @@ void checkImageDropdown() {
    else cp5.get(ScrollableList.class, "overlayList").hide();
    }
    */
+}
+
+void exportButton(int theValue) {
+  export();
 }

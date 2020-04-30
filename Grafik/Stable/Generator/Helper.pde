@@ -18,8 +18,11 @@ boolean cp5AutoDraw = true;
 boolean refresh = true;
 boolean export = false;
 int currentTracer = 0;
+boolean readyToGo = false;
 
 int menuHeight = 30;
+
+int polygonizerLength = 40;
 
 // fonts
 PFont myFont[] = new PFont[9];
@@ -40,6 +43,10 @@ void keyPressed() {
       //if(current <= 0) current = 0;
     }
     //println("show path " + (current+1) + " / " + tracer.getPathCount());
+  } else {
+     if (key == 'e' || key == 'E') {
+      export();
+    }
   }
 }
 
@@ -50,7 +57,7 @@ void init() {
   RG.ignoreStyles(ignoringStyles);
   //RG.setPolygonizer(RG.ADAPTATIVE);
   RG.setPolygonizer(RG.UNIFORMLENGTH);
-  RG.setPolygonizerLength(30);
+  RG.setPolygonizerLength(polygonizerLength);
   //RG.setPolygonizer(RG.UNIFORMSTEP);
   importer = new Importer("data");
   
@@ -105,11 +112,16 @@ void init() {
   buffer.textSize(fontSize);
   buffer.endDraw();
   
-
+  readyToGo = true;
+  initCurrentPathList(currentTracer);
 }
 
 void export() {
-  buffer.save("export/output.png");
+  if(readyToGo) {
+  
+    buffer.save("export/output.png");
+    println("Export: export/output.png");
+  }
 }
 
 void showOverlay() {
@@ -158,9 +170,16 @@ void initList() {
     for(int i = 0; i<importer.getFiles().size(); i++) {
       clusters[i] = loadStrings(importer.getFiles().get(i));
     }
+  } 
+}
+
+void initCurrentPathList(int currentTracer) {
+  
+  List l = new ArrayList();
+  for(int i = 0; i<tracers.get(currentTracer).getPathCount(); i++) {
+    l.add("path " + i);
   }
-  
-  
+  cp5.get(ScrollableList.class, "pathList").addItems(l);
 }
   
 float[] calculateAspectRatioFit(float srcWidth, float srcHeight, float maxWidth, float maxHeight) {

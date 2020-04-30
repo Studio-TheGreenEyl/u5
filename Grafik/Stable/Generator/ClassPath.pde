@@ -16,6 +16,7 @@ class Path {
   float offsetRotation = 0;  
   
   String textString = "";
+  int maxLengthOfString = 0;
   
   
   Path(RPoint[] _c, int _spacing) {
@@ -152,7 +153,59 @@ class Path {
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
           float size = map(i, 0, coords.length, 0.0, 1.0);
           buffer.rotateX(radians(int(xR)));
-          buffer.rotateY(radians(int(yR)));
+          //buffer.rotateY(radians(int(yR)));
+          if(i < coords.length - 1) {
+            buffer.rotateZ(getAngle(coords[i], coords[i+1]));
+          }
+          buffer.textFont(myFont[floor(size*9)]);
+          buffer.text(c, 0, 0);
+          //characterStep++;
+          if(characterStep < l) characterStep++;
+          if(characterStep >= l) {
+            //characterStep = 0;
+            //clusterStep++;
+            //clusterStep %= blocks.size();
+          }
+          
+        }
+        buffer.pop();        
+      }
+    }
+  }
+  
+  void displayCharacters3() {
+    float x = 0;
+    int l = textString.length();
+    if(blocks.size() > 0) {
+      int offsetKern = 0;
+      int characterStep = 0;
+      for(int i = 0; i<coords.length-1; i++) {
+        offsetKern = 0;
+        PVector p = new PVector(coords[i].x, coords[i].y);
+        buffer.push();
+        if(l > 0) {
+          char c = textString.charAt(characterStep);
+          float lw = textWidth(c) * kerning;
+          if(str(c).equals("I") || str(c).equals("i")) {
+            //offsetKern += 10;
+            //println("i = " + lw);
+            offsetKern = (int)lw/2;
+          } else {
+            //println(c +" = " + lw);
+          }
+          //if(i < coords.length-1) {
+            RPoint center = new RCommand(coords[i], coords[(i+1)]).getCenter();
+            buffer.translate(center.x+offsetKern, center.y);
+          //}
+          //else {
+            //buffer.translate(p.x, p.y);
+          //}
+          
+          float xR = map(i, 0, coords.length, rX[0], rX[1]);
+          float yR = map(i, 0, coords.length, rY[0], rY[1]);
+          float size = map(i, 0, coords.length, 0.0, 0.6);
+          buffer.rotateX(radians(int(xR)));
+          //buffer.rotateY(radians(int(yR)));
           if(i < coords.length - 1) {
             buffer.rotateZ(getAngle(coords[i], coords[i+1]));
           }
