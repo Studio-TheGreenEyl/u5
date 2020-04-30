@@ -1,5 +1,8 @@
 import controlP5.*;
 
+int setWidth = 6200;
+int setHeight = 1800;
+
 ControlP5 cp5; 
 ArrayList<Tracer> tracers = new ArrayList<Tracer>();
 String[][] clusters;
@@ -13,6 +16,7 @@ boolean ignoringStyles = true;
 boolean showOverlay = true;
 boolean cp5AutoDraw = true;
 boolean refresh = true;
+boolean export = false;
 int currentTracer = 0;
 
 int menuHeight = 30;
@@ -22,6 +26,7 @@ PFont myFont[] = new PFont[9];
 String fontname = "Theinhardt";
 String suffix = "Ita";
 float fontSize = 40;
+float kerning = 1.0;
 
 void keyPressed() {
   if (key == CODED) {
@@ -30,6 +35,7 @@ void keyPressed() {
       //current++;
       //if(current >= tracer.getPathCount()) current = tracer.getPathCount()-1;
     } else if (keyCode == DOWN) {
+      export = true;
       //current--;
       //if(current <= 0) current = 0;
     }
@@ -38,13 +44,13 @@ void keyPressed() {
 }
 
 void init() {
-   cp5 = new ControlP5(this);
- 
+  cp5 = new ControlP5(this);
+  //hint(ENABLE_DEPTH_SORT);
   RG.init(this);
   RG.ignoreStyles(ignoringStyles);
   //RG.setPolygonizer(RG.ADAPTATIVE);
   RG.setPolygonizer(RG.UNIFORMLENGTH);
-  RG.setPolygonizerLength(10);
+  RG.setPolygonizerLength(30);
   //RG.setPolygonizer(RG.UNIFORMSTEP);
   importer = new Importer("data");
   
@@ -70,11 +76,13 @@ void init() {
   surface.setLocation(0, 0);
   
   
-  float[] aspect = calculateAspectRatioFit(overlay.width, overlay.height, 2200, 2200);
+  float[] aspect = calculateAspectRatioFit(setWidth, setHeight, 1600, 1600);
   surface.setSize((int)aspect[0], (int)aspect[1]+menuHeight);
   surface.setResizable(true);
   
-  buffer = createGraphics(overlay.width, overlay.height, P3D);
+  buffer = createGraphics(setWidth, setHeight, P3D);
+  
+  //buffer = createGraphics(overlay.width, overlay.height, SVG, "export/output.svg");
   //importer = new Importer[3];
   
   //importer[1] = new Importer("data/backgrounds");
@@ -92,16 +100,16 @@ void init() {
   
   textFont(myFont[4]);
   textSize(fontSize);
-  
+  buffer.beginDraw();
   buffer.textFont(myFont[4]);
   buffer.textSize(fontSize);
-  
+  buffer.endDraw();
   
 
 }
 
 void export() {
-  buffer.save("export/######.svg");
+  buffer.save("export/output.png");
 }
 
 void showOverlay() {

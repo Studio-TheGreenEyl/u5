@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 24.1.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.0" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 3661 1063" style="enable-background:new 0 0 3661 1063;" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 6200 1800" style="enable-background:new 0 0 6200 1800;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;stroke:#000000;stroke-miterlimit:10;}
 </style>
-<image style="overflow:visible;opacity:0.4;enable-background:new    ;" width="3661" height="1063" xlink:href="../overlays/overlay.png" >
+<image style="overflow:visible;opacity:0.4;enable-background:new    ;" width="3661" height="1063" xlink:href="../overlays/overlay.png"  transform="matrix(1.6933 0 0 1.6933 0 -1.464844e-05)">
 </image>
-<path class="st0" d="M34,110.5c0,0,626.8,7.1,835,23c207.5,15.8,825.9,103.4,825.9,103.4L2082,105.5l1440.9-47.9"/>
-<path class="st0" d="M775.1,980.1c-6.4-12.8-44.7-178.9-44.7-178.9l-1.1-139.5l51.6-72.9L965,565l12.9-165.7l25.3-40.6l45-10.5
-	l318.9,45.2l34.6,75.8l0.5-64.1l34.6-18.1"/>
-<polygon class="st0" points="1661.9,839 1653.4,847.5 1665.6,853.4 1676.8,850.2 1676.8,843.3 "/>
-<path class="st0" d="M34,274c0,0,1326,1,1838-355"/>
-<path class="st0" d="M-61,582c0,0,432,189,1020-220"/>
-<path class="st0" d="M-104,743c0,0,313,266,747,266"/>
-<line class="st0" x1="3522.9" y1="166.6" x2="77.9" y2="348.2"/>
+<path class="st0" d="M-49,146.7C212.1,296.8,2548.9,42.2,2548.9,42.2"/>
+<path class="st0" d="M-49,355.6c0,0,2310.7-26.1,2852.5-267.6"/>
+<path class="st0" d="M-114.3,871.2c522.2,391.6,2819.8-450.4,2819.8-450.4"/>
+<path class="st0" d="M-49,636.2c0,0,1586.4-43.8,2656.7-339.4"/>
+<line class="st0" x1="4781.3" y1="65.1" x2="6530.6" y2="87.9"/>
+<line class="st0" x1="4559.4" y1="381.7" x2="6778.7" y2="355.6"/>
+<line class="st0" x1="4670.3" y1="753.7" x2="6713.4" y2="871.2"/>
+<line class="st0" x1="-532" y1="1719.8" x2="2607.7" y2="518.7"/>
 </svg>

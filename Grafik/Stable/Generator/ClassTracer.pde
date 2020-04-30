@@ -37,14 +37,16 @@ class Tracer {
   void displayAll() {
     //if(millis() - timestamp > interval) {
       //timestamp = millis();
-      buffer.beginDraw();
+      
+      
       for(int i = 0; i<paths.size(); i++) displayTrace(i);
-      buffer.endDraw();
+      
     //}
   } 
   void displayTrace(int current) {
     // method 1 paths.get(current).displayTextblock();
-    paths.get(current).displayCharacters();
+    //paths.get(current).displayCharacters();
+    paths.get(current).displayCharacters2();
   }
   
   // Debug Ansicht
