@@ -1,5 +1,7 @@
-int setWidth = 6200;
-int setHeight = 1800;
+import processing.dxf.*;
+
+int setWidth = 2480;
+int setHeight = 720;
 
 ControlP5 cp5; 
 ArrayList<Tracer> tracers = new ArrayList<Tracer>();
@@ -15,14 +17,14 @@ boolean ignoringStyles = true;
 boolean showOverlay = true;
 boolean cp5AutoDraw = true;
 boolean refresh = true;
-boolean export = false;
+boolean record = false;
 boolean readyToGo = false;
 
 int menuHeight = 30;
 
 int currentTracer = 0;
 int currentPath = 0;
-int polygonizerLength = 40;
+int polygonizerLength = 20;
 
 int exportFrame = 0;
 
@@ -30,7 +32,7 @@ int exportFrame = 0;
 PFont myFont[] = new PFont[9];
 String fontname = "Theinhardt";
 String suffix = "Ita";
-float fontSize = 40;
+float fontSize = 10;
 float kerning = 1.0;
 
 
@@ -42,7 +44,7 @@ void keyPressed() {
       //current++;
       //if(current >= tracer.getPathCount()) current = tracer.getPathCount()-1;
     } else if (keyCode == DOWN) {
-      export = true;
+      
       //current--;
       //if(current <= 0) current = 0;
     }
@@ -50,6 +52,8 @@ void keyPressed() {
   } else {
     if (key == 'e' || key == 'E') {
       export();
+    } else if (key == 'r' || key == 'R') {
+      record = true;
     }
   }
 }
@@ -131,6 +135,8 @@ void export() {
     println("Export: export/"+ fn);
   }
 }
+
+
 
 void showOverlay() {
   if (showOverlay) {

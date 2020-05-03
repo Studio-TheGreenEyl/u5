@@ -46,7 +46,7 @@ class Tracer {
   void displayTrace(int current) {
     // method 1 paths.get(current).displayTextblock();
     //paths.get(current).displayCharacters();
-    paths.get(current).displayCharacters3();
+    paths.get(current).displayCharacters4();
   }
   
   // Debug Ansicht
