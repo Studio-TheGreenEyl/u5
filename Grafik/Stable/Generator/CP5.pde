@@ -296,5 +296,5 @@ void controlEvent(ControlEvent theControlEvent) {
 }
 
 void exportButton(int theValue) {
-  export();
+  if(readyToGo) setState(EXPORT);
 }

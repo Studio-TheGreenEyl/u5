@@ -1,14 +1,19 @@
-import processing.dxf.*;
+import processing.pdf.*;
 
-int setWidth = 2480;
-int setHeight = 720;
+int setWidth = 36614;
+int setHeight = 10630;
+int[] segments = {16000, 16000, 4614};
+int segmentWidth = 16000;
+int restWidth = 4614;
+float scaleFactor = 14.7637096774;
 
 ControlP5 cp5; 
 ArrayList<Tracer> tracers = new ArrayList<Tracer>();
 String[][] clusters;
 Importer importer; // overlays, backgrounds, texts
 
-PGraphics buffer;
+PGraphics[] buffer = new PGraphics[3];
+PGraphics preview;
 PGraphics active;
 PImage overlay;
 
@@ -19,39 +24,45 @@ boolean cp5AutoDraw = true;
 boolean refresh = true;
 boolean record = false;
 boolean readyToGo = false;
+boolean fullResolution = false;
+float partRes = 0.5; // half res 
 
 int menuHeight = 30;
 
 int currentTracer = 0;
 int currentPath = 0;
+int currentBuffer = 0;
 int polygonizerLength = 20;
 
 int exportFrame = 0;
 
 // fonts
 PFont myFont[] = new PFont[9];
+PFont myFontUpscaled[] = new PFont[9];
 String fontname = "Theinhardt";
 String suffix = "Ita";
-float fontSize = 10;
+int fontSize = 40;
+int fontScaling = 4;
 float kerning = 1.0;
 
-
+int state = SETUP;
 
 void keyPressed() {
   if (key == CODED) {
     if (keyCode == UP) {
-      export();
+      setState(EXPORT);
       //current++;
       //if(current >= tracer.getPathCount()) current = tracer.getPathCount()-1;
     } else if (keyCode == DOWN) {
-      
+      exit();
       //current--;
       //if(current <= 0) current = 0;
     }
     //println("show path " + (current+1) + " / " + tracer.getPathCount());
   } else {
     if (key == 'e' || key == 'E') {
-      export();
+      setState(EXPORT);
+      
     } else if (key == 'r' || key == 'R') {
       record = true;
     }
@@ -92,12 +103,16 @@ void init() {
   surface.setLocation(0, 0);
 
 
-  float[] aspect = calculateAspectRatioFit(setWidth, setHeight, 1600, 1600);
-  surface.setSize((int)aspect[0], (int)aspect[1]+menuHeight);
-  surface.setResizable(true);
+  float[] aspect = calculateAspectRatioFit(setWidth, setHeight, 2480, 720);
+  //surface.setSize((int)aspect[0], (int)aspect[1]+menuHeight);
+  //surface.setResizable(true);
 
-  buffer = createGraphics(setWidth, setHeight, P3D);
-  active = createGraphics(setWidth, setHeight, P2D);
+  buffer[0] = createGraphics(segments[0], setHeight, P3D);
+  buffer[1] = createGraphics(segments[1], setHeight, P3D);
+  buffer[2] = createGraphics(segments[2], setHeight, P3D);
+  
+  active = createGraphics(2480, 720, P2D);
+  preview = createGraphics(2480, 720, P3D);
 
   //buffer = createGraphics(overlay.width, overlay.height, SVG, "export/output.svg");
   //importer = new Importer[3];
@@ -114,13 +129,30 @@ void init() {
   myFont[6] = createFont(fontname+"-Bold"+suffix, fontSize);
   myFont[7] = createFont(fontname+"-Heavy"+suffix, fontSize);
   myFont[8] = createFont(fontname+"-Black"+suffix, fontSize);
+  
+  myFontUpscaled[0] = createFont(fontname+"-Hairline"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[1] = createFont(fontname+"-Ultralight"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[2] = createFont(fontname+"-Thin"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[3] = createFont(fontname+"-Light"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[4] = createFont(fontname+"-Regular"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[5] = createFont(fontname+"-Medium"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[6] = createFont(fontname+"-Bold"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[7] = createFont(fontname+"-Heavy"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[8] = createFont(fontname+"-Black"+suffix, int(fontSize*fontScaling));
 
   textFont(myFont[4]);
-  textSize(fontSize);
-  buffer.beginDraw();
-  buffer.textFont(myFont[4]);
-  buffer.textSize(fontSize);
-  buffer.endDraw();
+  textSize(scaleFactor);
+  for(int i = 0; i<segments.length; i++) {
+    buffer[i].beginDraw();
+    buffer[i].textFont(myFontUpscaled[4]);
+    buffer[i].textSize(int(fontSize*fontScaling));
+    buffer[i].endDraw();
+  }
+  
+  preview.beginDraw();
+  preview.textFont(myFont[4]);
+  preview.textSize(fontSize);
+  preview.endDraw();
 
   readyToGo = true;
   initCurrentPathList(currentTracer);
@@ -128,34 +160,27 @@ void init() {
 
 void export() {
   if (readyToGo) {
+    
     String date = year() +""+ nf(month(), 2) +""+ nf(day(), 2) +"_"+ nf(hour(), 2) +""+ nf(minute(), 2) +""+ nf(second(), 2);
-    String fn = "output_"+ date +"_"+ nf(exportFrame, 5) +".png";
-    buffer.save("export/"+ fn);
+    String fn = "";
+    for(int i = 0; i<segments.length; i++) {
+      fn = "output_"+ date +"_"+ nf(exportFrame, 5) +"_"+ i +"_.png";
+      buffer[i].save("export/"+ fn);
+      println("Export: export/"+ fn);
+    }
     exportFrame++;
-    println("Export: export/"+ fn);
+    
   }
 }
 
-
-
 void showOverlay() {
   if (showOverlay) {
-    //buffer.beginDraw();
-    //buffer.push();
-    //buffer.blendMode(LIGHTEST);
-    //buffer.image(overlay, 0, 0);
-
     push();
     blendMode(LIGHTEST);
     image(overlay, 0, menuHeight, width, height-menuHeight);
     pop();
-
-    //buffer.pop();
-    //buffer.endDraw();
   }
 }
-
-
 
 void initList() {
   List l = new ArrayList();
@@ -190,11 +215,9 @@ void initList() {
 
 
 void cleanCurrentPathList(int currentTracer) {
-  //for(int i = 0; i<tracers.get(currentTracer).getPathCount(); i++) {
-  //String n = println(cp5.get(ScrollableList.class, "pathList").getItem(i));    
-  //}
   cp5.get(ScrollableList.class, "pathList").clear();
 }
+
 void initCurrentPathList(int currentTracer) {
   List l = new ArrayList();
   for (int i = 0; i<tracers.get(currentTracer).getPathCount(); i++) {

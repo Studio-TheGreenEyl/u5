@@ -2,7 +2,9 @@ import geomerative.*;
 
 class Tracer {
   RShape grp;
-  RPoint[][] pointPaths;
+  RPoint[][] pointPaths; // not-scaled
+  RPoint[][] upscaledPointPaths; // upscaled to endformat
+  
   ArrayList<Path> paths = new ArrayList<Path>();
   int spacing = 10; // 0 = kein spationieren
   
@@ -14,6 +16,16 @@ class Tracer {
     grp = RG.loadShape(filename);
     //grp.centerIn(g, 100, 1, 1);
     pointPaths = grp.getPointsInPaths();
+    upscaledPointPaths = grp.getPointsInPaths();
+    
+    
+    for(int i = 0; i<pointPaths.length; i++) {
+      for(int j = 0; j<pointPaths[i].length; j++) {
+        upscaledPointPaths[i][j].x *= scaleFactor;
+        upscaledPointPaths[i][j].y *= scaleFactor;
+      }
+    }
+    
     initPaths();
     timestamp = millis();
     
@@ -25,7 +37,7 @@ class Tracer {
         if(pointPaths[i] != null) {
           //for(int j = 0; j<getPath(i).length; j++){
             //PVector p = new PVector(getPath(i)[j].x, getPath(i)[j].y);
-            paths.add(new Path(getPath(i), spacing));
+            paths.add(new Path(getPath(i), getPathUpscaled(i), spacing));
             // zuviele paths
           //}
         }
@@ -46,7 +58,7 @@ class Tracer {
   void displayTrace(int current) {
     // method 1 paths.get(current).displayTextblock();
     //paths.get(current).displayCharacters();
-    paths.get(current).displayCharacters4();
+    paths.get(current).displayCharacters3();
   }
   
   // Debug Ansicht
@@ -61,20 +73,20 @@ class Tracer {
   // Debug Ansicht
   void debugDisplayPath(int current) {
     if(pointPaths[current] != null) {
-      buffer.beginDraw();
-      buffer.push();
-      buffer.rectMode(CENTER);
-      buffer.beginShape();
-      buffer.stroke(random(255), random(255), random(255));
-      buffer.noFill();
+      buffer[currentBuffer].beginDraw();
+      buffer[currentBuffer].push();
+      buffer[currentBuffer].rectMode(CENTER);
+      buffer[currentBuffer].beginShape();
+      buffer[currentBuffer].stroke(random(255), random(255), random(255));
+      buffer[currentBuffer].noFill();
       for(int j = 0; j<getPath(current).length; j++){
         PVector p = new PVector(getPath(current)[j].x, getPath(current)[j].y);
-        buffer.vertex(p.x, p.y);
+        buffer[currentBuffer].vertex(p.x, p.y);
         //DEBUG rect(p.x, p.y, 5, 5);
       }
-      buffer.endShape();
-      buffer.pop();
-      buffer.beginDraw();
+      buffer[currentBuffer].endShape();
+      buffer[currentBuffer].pop();
+      buffer[currentBuffer].beginDraw();
     }
   }
   
@@ -84,6 +96,10 @@ class Tracer {
   
   RPoint[] getPath(int i) {
     return pointPaths[i];
+  }
+  
+  RPoint[] getPathUpscaled(int i) {
+    return upscaledPointPaths[i];
   }
   
   Path getCurrentPath() {

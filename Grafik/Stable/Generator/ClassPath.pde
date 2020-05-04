@@ -3,6 +3,7 @@ class Path {
   // Rotation, Skalierung können hier abgespeichert werden
   // und auf die Textblöcke auf einer per Objekt Basis übertragen werden
   RPoint[] coords;
+  RPoint[] upscaledCoords;
   ArrayList<Textblock> blocks = new ArrayList<Textblock>();
   int cluster = 1; // Welche textdatei
   int clusterStep = 0;
@@ -21,8 +22,9 @@ class Path {
   int maxLengthOfString = 0;
   
   
-  Path(RPoint[] _c, int _spacing) {
-    coords = _c;
+  Path(RPoint[] _coords, RPoint[] _upscaled, int _spacing) {
+    coords = _coords;
+    upscaledCoords = _upscaled;
     spacing = _spacing;
     init();
     clusterStep = (int)random(clusters[clusterStep].length-1);
@@ -76,9 +78,9 @@ class Path {
       
       for(int i = 0; i<blocks.size(); i++) {
         //if(i % spacing == 0) {
-          buffer.stroke(255);
-          buffer.noFill();
-          buffer.rectMode(CENTER);
+          buffer[0].stroke(255);
+          buffer[0].noFill();
+          buffer[0].rectMode(CENTER);
           blocks.get(i).display();
         //}
       }
@@ -93,7 +95,7 @@ class Path {
         PVector p = new PVector(coords[i].x, coords[i].y);
         Textblock b = blocks.get(clusterStep);
         int l = b.getLength();
-        buffer.push();
+        buffer[currentBuffer].push();
         if(l > 0) {
           
           char c = b.getCharacter(characterStep);
@@ -101,7 +103,7 @@ class Path {
           
           if(i < coords.length - 1) {
             RPoint center = new RCommand(coords[i], coords[i+1]).getCenter();
-            buffer.translate(center.x, center.y);
+            buffer[currentBuffer].translate(center.x, center.y);
           } else {
            // buffer.translate(p.x, p.y);
           }
@@ -109,13 +111,13 @@ class Path {
           float xR = map(i, 0, coords.length, rX[0], rX[1]);
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
           
-          buffer.rotateX(radians(int(xR)));
-          buffer.rotateY(radians(int(yR)));
+          buffer[currentBuffer].rotateX(radians(int(xR)));
+          buffer[currentBuffer].rotateY(radians(int(yR)));
           if(i < coords.length - 1) {
-            buffer.rotateZ(getAngle(coords[i], coords[i+1]));
+            buffer[currentBuffer].rotateZ(getAngle(coords[i], coords[i+1]));
           }
           
-          buffer.text(c, 0, 0);
+          buffer[0].text(c, 0, 0);
           if(characterStep < l) characterStep++;
           
           if(characterStep >= l) {
@@ -125,7 +127,7 @@ class Path {
           }
           
         }
-        buffer.pop();        
+        buffer[currentBuffer].pop();
       }
     }
   }
@@ -138,14 +140,14 @@ class Path {
       int characterStep = 0;
       for(int i = 0; i<coords.length; i++) {
         PVector p = new PVector(coords[i].x, coords[i].y);
-        buffer.push();
+        buffer[currentBuffer].push();
         if(l > 0) {
           char c = textString.charAt(characterStep);
           float lw = textWidth(c) * kerning;
           if(str(c).equals("I") || str(c).equals("i")) offsetKern += 10;
           if(i < coords.length-1) {
             RPoint center = new RCommand(coords[i], coords[(i+1)]).getCenter();
-            buffer.translate(center.x, center.y);
+            buffer[currentBuffer].translate(center.x, center.y);
           }
           //else {
             //buffer.translate(p.x, p.y);
@@ -154,13 +156,13 @@ class Path {
           float xR = map(i, 0, coords.length, rX[0], rX[1]);
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
           float size = map(i, 0, coords.length, 0.0, 1.0);
-          buffer.rotateX(radians(int(xR)));
+          buffer[0].rotateX(radians(int(xR)));
           //buffer.rotateY(radians(int(yR)));
           if(i < coords.length - 1) {
-            buffer.rotateZ(getAngle(coords[i], coords[i+1]));
+            buffer[currentBuffer].rotateZ(getAngle(coords[i], coords[i+1]));
           }
-          buffer.textFont(myFont[floor(size*9)]);
-          buffer.text(c, 0, 0);
+          buffer[currentBuffer].textFont(myFont[floor(size*9)]);
+          buffer[currentBuffer].text(c, 0, 0);
           //characterStep++;
           if(characterStep < l) characterStep++;
           if(characterStep >= l) {
@@ -170,7 +172,7 @@ class Path {
           }
           
         }
-        buffer.pop();        
+        buffer[currentBuffer].pop();        
       }
     }
   }
@@ -184,7 +186,18 @@ class Path {
       for(int i = 0; i<coords.length-1; i++) {
         offsetKern = 0;
         PVector p = new PVector(coords[i].x, coords[i].y);
-        buffer.push();
+        
+        if(state == EXPORT) buffer[currentBuffer].push();
+        else preview.push();
+        
+        int xOffset = 0;
+        if(currentBuffer == 0) xOffset = 0;
+        else if(currentBuffer == 1) xOffset = -16000;
+        else if(currentBuffer == 2) xOffset = -32000;
+        
+        
+        if(state == EXPORT) buffer[currentBuffer].translate(xOffset, 0);
+        
         if(l > 0) {
           char c = textString.charAt(characterStep);
           float lw = textWidth(c) * kerning;
@@ -196,8 +209,16 @@ class Path {
             //println(c +" = " + lw);
           }
           //if(i < coords.length-1) {
-            RPoint center = new RCommand(coords[i], coords[(i+1)]).getCenter();
-            buffer.translate(center.x+offsetKern, center.y);
+            RPoint center = null;
+            
+            
+            if(state == EXPORT) {
+              center = new RCommand(upscaledCoords[i], upscaledCoords[(i+1)]).getCenter();
+              buffer[currentBuffer].translate(center.x+offsetKern, center.y);
+            } else {
+              center = new RCommand(coords[i], coords[(i+1)]).getCenter();
+              preview.translate(center.x+offsetKern, center.y);
+            }
           //}
           //else {
             //buffer.translate(p.x, p.y);
@@ -207,13 +228,24 @@ class Path {
           float yR = map(i, 0, coords.length, rY[0], rY[1]);
           //float size = map(i, 0, coords.length, 0.0, 0.6);
           float size = map(i, 0, coords.length, fontSize[0], fontSize[1]);
-          buffer.rotateX(radians(int(xR)));
-          buffer.rotateY(radians(int(yR)));
-          if(i < coords.length - 1) {
-            buffer.rotateZ(getAngle(coords[i], coords[i+1]));
+          if(state == EXPORT) {
+            buffer[currentBuffer].rotateX(radians(int(xR)));
+            buffer[currentBuffer].rotateY(radians(int(yR)));
+          } else {
+            preview.rotateX(radians(int(xR)));
+            preview.rotateY(radians(int(yR)));
           }
-          buffer.textFont(myFont[floor(size*9)]);
-          buffer.text(c, 0, 0);
+          if(i < coords.length - 1) {
+            if(state == EXPORT) buffer[currentBuffer].rotateZ(getAngle(upscaledCoords[i], upscaledCoords[i+1]));
+            else preview.rotateZ(getAngle(coords[i], coords[i+1]));
+          }
+          if(state == EXPORT) {
+            buffer[currentBuffer].textFont(myFontUpscaled[floor(size*9)]);
+            buffer[currentBuffer].text(c, 0, 0);
+          } else {
+            preview.textFont(myFont[floor(size*9)]);
+            preview.text(c, 0, 0);
+          }
           //characterStep++;
           if(characterStep < l) characterStep++;
           if(characterStep >= l) {
@@ -223,63 +255,13 @@ class Path {
           }
           
         }
-        buffer.pop();        
+        if(state == EXPORT) buffer[currentBuffer].pop();
+        else preview.pop();
       }
     }
   }
   
-  void displayCharacters4() {
-    float x = 0;
-    int l = textString.length();
-    if(blocks.size() > 0) {
-      int offsetKern = 0;
-      int characterStep = 0;
-      for(int i = 0; i<coords.length-1; i++) {
-        offsetKern = 0;
-        PVector p = new PVector(coords[i].x, coords[i].y);
-        push();
-        if(l > 0) {
-          char c = textString.charAt(characterStep);
-          float lw = textWidth(c) * kerning;
-          if(str(c).equals("I") || str(c).equals("i")) {
-            //offsetKern += 10;
-            //println("i = " + lw);
-            offsetKern = (int)lw/2;
-          } else {
-            //println(c +" = " + lw);
-          }
-          //if(i < coords.length-1) {
-            RPoint center = new RCommand(coords[i], coords[(i+1)]).getCenter();
-            translate(center.x+offsetKern, center.y);
-          //}
-          //else {
-            //buffer.translate(p.x, p.y);
-          //}
-          
-          float xR = map(i, 0, coords.length, rX[0], rX[1]);
-          float yR = map(i, 0, coords.length, rY[0], rY[1]);
-          //float size = map(i, 0, coords.length, 0.0, 0.6);
-          float size = map(i, 0, coords.length, fontSize[0], fontSize[1]);
-          rotateX(radians(int(xR)));
-          rotateY(radians(int(yR)));
-          if(i < coords.length - 1) {
-            rotateZ(getAngle(coords[i], coords[i+1]));
-          }
-          textFont(myFont[floor(size*9)]);
-          text(c, 0, 0);
-          //characterStep++;
-          if(characterStep < l) characterStep++;
-          if(characterStep >= l) {
-            //characterStep = 0;
-            //clusterStep++;
-            //clusterStep %= blocks.size();
-          }
-          
-        }
-        pop();        
-      }
-    }
-  }
+ 
   
   void active() {
     strokeWeight = 4;
@@ -317,6 +299,10 @@ class Path {
     return coords;
   }
   
+  RPoint[] getCoordsUpscaled() {
+    return upscaledCoords;
+  }
+  
 }
 
 class Textblock {
@@ -335,16 +321,16 @@ class Textblock {
   void update() {
   }
   void display() {
-    buffer.push();
-    buffer.translate(p.x, p.y);
+    buffer[currentBuffer].push();
+    buffer[currentBuffer].translate(p.x, p.y);
     
     
     //buffer.ellipse(0, 0, 3, 3);
     
-    buffer.rotate(rotation);
-    buffer.text(text, 0, 0);
+    buffer[currentBuffer].rotate(rotation);
+    buffer[currentBuffer].text(text, 0, 0);
     //buffer.rect(0, 0, 20, 8);
-    buffer.pop();
+    buffer[currentBuffer].pop();
   }
   
   void setRotation(float r) {
