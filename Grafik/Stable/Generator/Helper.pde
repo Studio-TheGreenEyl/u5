@@ -26,7 +26,11 @@ boolean record = false;
 boolean readyToGo = false;
 boolean fullResolution = false;
 boolean showActivePath = true;
-float partRes = 0.5; // half res 
+
+float partRes = 0.5; // half res
+
+float[] y = {1f};
+float[] n = {0f};
 
 int menuHeight = 50;
 

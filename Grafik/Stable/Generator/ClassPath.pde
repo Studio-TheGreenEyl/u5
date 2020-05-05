@@ -23,6 +23,8 @@ class Path {
   
   boolean uppercase = true;
   
+  boolean rotModeX = false;
+  boolean rotModeY = false;
   
   // path effects
   /*
@@ -205,7 +207,17 @@ class Path {
     if(blocks.size() > 0) {
       int offsetKern = 0;
       int characterStep = 0;
+      
+      if(rotModeX) {
+        //preview.rotateX(radians(int(rX[1])));
+        println(rX[1]);
+      }
+      if(rotModeY) {
+        //preview.rotateY(radians(int(rY[1])));
+      }
       for(int i = 0; i<cutoff-1; i++) {
+        float xR = map(i, 0, coords.length, rX[0], rX[1]);
+        float yR = map(i, 0, coords.length, rY[0], rY[1]);
         offsetKern = 0;
         PVector p = new PVector(coords[i].x, coords[i].y);
         
@@ -247,16 +259,21 @@ class Path {
             //buffer.translate(p.x, p.y);
           //}
           
-          float xR = map(i, 0, coords.length, rX[0], rX[1]);
-          float yR = map(i, 0, coords.length, rY[0], rY[1]);
+          
           //float size = map(i, 0, coords.length, 0.0, 0.6);
           float size = map(i, 0, coords.length, fontSize[0], fontSize[1]);
           if(state == EXPORT) {
-            buffer[currentBuffer].rotateX(radians(int(xR)));
-            buffer[currentBuffer].rotateY(radians(int(yR)));
+            if(!rotModeX) buffer[currentBuffer].rotateX(radians(int(xR)));
+            else buffer[currentBuffer].rotateY(radians(int(rX[1])));
+            
+            if(!rotModeY) buffer[currentBuffer].rotateY(radians(int(yR)));
+            else buffer[currentBuffer].rotateY(radians(int(rY[1])));
           } else {
-            preview.rotateX(radians(int(xR)));
-            preview.rotateY(radians(int(yR)));
+            if(!rotModeX) preview.rotateX(radians(int(xR)));
+            else preview.rotateX(radians(int(rX[1])));
+            
+            if(!rotModeY) preview.rotateY(radians(int(yR)));
+            else preview.rotateY(radians(int(rY[1])));
           }
           if(i < coords.length - 1) {
             if(state == EXPORT) buffer[currentBuffer].rotateZ(getAngle(upscaledCoords[i], upscaledCoords[i+1]));
@@ -351,6 +368,22 @@ class Path {
   
   float getCutoff() {
     return cutoffFloat;
+  }
+  
+  void setRotModeX(boolean b) {
+    rotModeX = b;
+  }
+  
+  void setRotModeY(boolean b) {
+    rotModeY = b;
+  }
+  
+  boolean getRotModeX() {
+    return rotModeX;
+  }
+  
+  boolean getRotModeY() {
+    return rotModeY;
   }
   
   

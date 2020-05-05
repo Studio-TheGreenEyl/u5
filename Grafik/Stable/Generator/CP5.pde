@@ -5,8 +5,8 @@ Textlabel stateLabel;
 Textlabel frameRateLabel;
 Textlabel inputLabel;
 Textlabel brightnessInPercLabel;
-CheckBox showOverlayCheckbox;
-CheckBox offlineCheckbox;
+CheckBox rotModeX;
+CheckBox rotModeY;
 CheckBox rotateCheckbox;
 CheckBox redrawCheckbox;
 CheckBox invertCheckbox;
@@ -97,18 +97,19 @@ void constructGUI() {
    ;
    
    
-   
-   showOverlayCheckbox = cp5.addCheckBox("showOverlayCheckbox")
-   .setPosition(340, 5)
-   .setSize(32, 16)
-   .addItem("play", 1)
+   */
+   rotModeX = cp5.addCheckBox("rotModeXCheckbox")
+   .setPosition(750, 30)
+   .setSize(16, 16)
+   .addItem("rotate mode X", 1)
    ;
    
-   offlineCheckbox = cp5.addCheckBox("offlineCheckbox")
-   .setPosition(14, 40)
-   .setSize(32, 8)
-   .addItem("offline", 1)
+   rotModeY = cp5.addCheckBox("rotModeYCheckbox")
+   .setPosition(1000, 30)
+   .setSize(16, 16)
+   .addItem("rotate mode Y", 1)
    ;
+   /*
    rotateCheckbox = cp5.addCheckBox("rotateCheckbox")
    .setPosition(14, 50)
    .setSize(32, 8)
@@ -149,7 +150,7 @@ void constructGUI() {
   rangeRotationX = cp5.addRange("rangeRotationX")
      // disable broadcasting since setRange and setRangeValues will trigger an event
      .setBroadcast(false) 
-     .setPosition(750,0)
+     .setPosition(750, 2)
      .setSize(200,10)
      .setHandleSize(10)
      .setRange(0,360)
@@ -163,7 +164,7 @@ void constructGUI() {
    rangeRotationX = cp5.addRange("rangeRotationY")
      // disable broadcasting since setRange and setRangeValues will trigger an event
      .setBroadcast(false) 
-     .setPosition(750,10)
+     .setPosition(1000,2)
      .setSize(200,10)
      .setHandleSize(10)
      .setRange(0,360)
@@ -230,10 +231,9 @@ void constructGUI() {
 
   // settings.json werte einpassen
   // checkboxes
-  float[] y = {1f};
-  float[] n = {0f};
+  
 
-  //playCheckbox.setArrayValue((play?y:n));
+  //rotModeX.setArrayValue((play?y:n));
   //offlineCheckbox.setArrayValue((offline?y:n));
   //rotateCheckbox.setArrayValue((rotate?y:n));
   //redrawCheckbox.setArrayValue((redraw?y:n));
@@ -243,6 +243,7 @@ void constructGUI() {
   //cp5.getController("linePixelPitch").setValue(linePixelPitch);
 }
 
+// ScrollableLists
 void overlayList(int n) {
   String s = (String)cp5.get(ScrollableList.class, "overlayList").getItem(n).get("text");
   // check if this is a valid image?
@@ -290,8 +291,15 @@ void pathList(int n) {
     cp5.get(ScrollableList.class, "textList").close();
     
     float cutoff = tracers.get(currentTracer).getCurrentPath().getCutoff();
-    println(cutoff);
     cp5.getController("sliderCutoff").setValue(cutoff);
+    
+    boolean bX = tracers.get(currentTracer).getCurrentPath().getRotModeX();
+    boolean bY = tracers.get(currentTracer).getCurrentPath().getRotModeY();
+    float[] yes = {1f};
+    float[] no = {0f};
+    rotModeX.setArrayValue((bX?yes:no));
+    rotModeY.setArrayValue((bY?yes:no));
+    
   }
 }
 
@@ -301,10 +309,6 @@ void textList(int n) {
   if(s.length() > 0) {
     tracers.get(currentTracer).getCurrentPath().setClusterAndInit(n);
   }
-  
-  
-  
-  
 }
 
 void checkImageDropdown() {
@@ -345,6 +349,8 @@ void controlEvent(ControlEvent theControlEvent) {
   
 }
 
+
+// BUTTONS
 void exportButton(int theValue) {
   if(readyToGo) setState(EXPORT);
 }
@@ -354,12 +360,39 @@ void activePathButton(int theValue) {
 }
 
 
-
-
+// SLIDERS
 void sliderCutoff(float theVal) {
   if(readyToGo) {
     if(tracers.get(currentTracer).getCurrentPath() != null) {
       tracers.get(currentTracer).getCurrentPath().setCutoff(theVal);
     }
   }
+}
+
+
+// CHECKBOXES
+void rotModeXCheckbox(float[] a) {
+  boolean b = false;
+  if (a[0] == 1f) b = true;
+  else b = false;
+  
+  if(readyToGo) {
+    if(tracers.get(currentTracer).getCurrentPath() != null) {
+      tracers.get(currentTracer).getCurrentPath().setRotModeX(b);
+    }
+  }
+  
+}
+
+void rotModeYCheckbox(float[] a) {
+  boolean b = false;
+  if (a[0] == 1f) b = true;
+  else b = false;
+  
+  if(readyToGo) {
+    if(tracers.get(currentTracer).getCurrentPath() != null) {
+      tracers.get(currentTracer).getCurrentPath().setRotModeY(b);
+    }
+  }
+  
 }
