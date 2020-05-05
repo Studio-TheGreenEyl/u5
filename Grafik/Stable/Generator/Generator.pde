@@ -5,7 +5,7 @@
 */
 
 void setup() {
-  size(2480, 720, P3D);
+  size(2480, 770, P3D);
   init();
 }
 

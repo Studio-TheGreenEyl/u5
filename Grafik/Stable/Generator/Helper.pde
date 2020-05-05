@@ -28,7 +28,7 @@ boolean fullResolution = false;
 boolean showActivePath = true;
 float partRes = 0.5; // half res 
 
-int menuHeight = 30;
+int menuHeight = 50;
 
 int currentTracer = 0;
 int currentPath = 0;

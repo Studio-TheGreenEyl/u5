@@ -32,4 +32,4 @@ http://louisc.co.uk/?p=2686
 - [ ] Change text positions (???)
 - [ ] Text width
 - [x] deactivate overlay
-- [ ] output name: date + time + iterator
+- [x] output name: date + time + iterator

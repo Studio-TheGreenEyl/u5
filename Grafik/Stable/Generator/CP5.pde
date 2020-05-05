@@ -26,14 +26,16 @@ void constructGUI() {
   color white = color(255, 255, 255);
   color gray = color(125, 125, 125);
   cp5.setAutoDraw(cp5AutoDraw);
-  /*
-  cp5.addSlider("sliderBrightness")
-   .setRange(0, 255)
-   .setPosition(15, 110)
+  
+  cp5.addSlider("sliderCutoff")
+   .setRange(0f, 1f)
+   .setPosition(550, 2)
    .setValue(255)
-   .setSize(100, 8)
+   .setSize(100, 20)
    .setColorValue(black)
+   .setLabel("text cutoff")
    ;
+   /*
    cp5.addSlider("rotationSpeed")
    .setRange(0, 0.05)
    .setPosition(15, 120)
@@ -72,7 +74,7 @@ void constructGUI() {
    
    stateTitle = cp5.addTextlabel("label1")
    .setText("Overlay: ")
-   .setPosition(320, 5)
+   .setPosition(530, 5)
    ;
    
    stateLabel = cp5.addTextlabel("label2")
@@ -155,7 +157,8 @@ void constructGUI() {
      // after the initialization we turn broadcast back on again
      .setBroadcast(true)
      .setColorForeground(color(255,40))
-     .setColorBackground(color(255,40))  
+     .setColorBackground(color(255,40))
+     .setLabel("rotation X")
      ;
    rangeRotationX = cp5.addRange("rangeRotationY")
      // disable broadcasting since setRange and setRangeValues will trigger an event
@@ -168,7 +171,8 @@ void constructGUI() {
      // after the initialization we turn broadcast back on again
      .setBroadcast(true)
      .setColorForeground(color(255,40))
-     .setColorBackground(color(255,40))  
+     .setColorBackground(color(255,40))
+     .setLabel("rotation Y")
      ;
      /*
   rangeFontSize = cp5.addRange("rangeFontSize")
@@ -250,8 +254,8 @@ void overlayList(int n) {
         showOverlay = true;
         overlay = loadImage(importer.getFiles().get(n));
       }
-      cp5.get(ScrollableList.class, "overlayList").setLabel(s);
-      cp5.get(ScrollableList.class, "overlayList").setValue(n);
+      
+      
       cp5.get(ScrollableList.class, "overlayList").close();
     } else println("[#] ERROR : the image is not valid. string size is low or equal than 0");
     refresh = true;
@@ -267,8 +271,6 @@ void backgroundList(int n) {
   currentTracer = n;
   initCurrentPathList(currentTracer);
   refresh = true;
-  cp5.get(ScrollableList.class, "backgroundList").setLabel(s);
-  cp5.get(ScrollableList.class, "backgroundList").setValue(n);
   cp5.get(ScrollableList.class, "backgroundList").close(); 
 }
 
@@ -286,6 +288,10 @@ void pathList(int n) {
     cp5.get(ScrollableList.class, "textList").setLabel(s);
     cp5.get(ScrollableList.class, "textList").setValue(cluster);
     cp5.get(ScrollableList.class, "textList").close();
+    
+    float cutoff = tracers.get(currentTracer).getCurrentPath().getCutoff();
+    println(cutoff);
+    cp5.getController("sliderCutoff").setValue(cutoff);
   }
 }
 
@@ -345,4 +351,15 @@ void exportButton(int theValue) {
 
 void activePathButton(int theValue) {
   if(readyToGo) showActivePath = !showActivePath;
+}
+
+
+
+
+void sliderCutoff(float theVal) {
+  if(readyToGo) {
+    if(tracers.get(currentTracer).getCurrentPath() != null) {
+      tracers.get(currentTracer).getCurrentPath().setCutoff(theVal);
+    }
+  }
 }

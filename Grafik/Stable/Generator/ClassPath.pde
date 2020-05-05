@@ -34,6 +34,9 @@ class Path {
     visible/hidden
   */
   
+  int cutoff;
+  float cutoffFloat;
+  
   Path(RPoint[] _coords, RPoint[] _upscaled, int _spacing) {
     coords = _coords;
     upscaledCoords = _upscaled;
@@ -47,6 +50,8 @@ class Path {
     rY[1] = 0;
     initText();
       
+    cutoff = coords.length;
+    cutoffFloat = 1.0;
   }
   
   void initText() {
@@ -200,7 +205,7 @@ class Path {
     if(blocks.size() > 0) {
       int offsetKern = 0;
       int characterStep = 0;
-      for(int i = 0; i<coords.length-1; i++) {
+      for(int i = 0; i<cutoff-1; i++) {
         offsetKern = 0;
         PVector p = new PVector(coords[i].x, coords[i].y);
         
@@ -338,6 +343,16 @@ class Path {
     setCluster(n);
     initText();
   }
+  
+  void setCutoff(float n) {
+    cutoff = (int)map(n, 0f, 1f, 0, coords.length);
+    cutoffFloat = n;
+  }
+  
+  float getCutoff() {
+    return cutoffFloat;
+  }
+  
   
 }
 

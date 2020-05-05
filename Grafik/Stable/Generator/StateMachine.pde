@@ -68,7 +68,8 @@ void stateMachine(int state) {
   
       showOverlay();
       push();
-      fill(255);
+      fill(60);
+      noStroke();
       rect(0, 0, width, menuHeight);
       pop();
       
