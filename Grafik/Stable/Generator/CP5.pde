@@ -250,6 +250,9 @@ void overlayList(int n) {
         showOverlay = true;
         overlay = loadImage(importer.getFiles().get(n));
       }
+      cp5.get(ScrollableList.class, "overlayList").setLabel(s);
+      cp5.get(ScrollableList.class, "overlayList").setValue(n);
+      cp5.get(ScrollableList.class, "overlayList").close();
     } else println("[#] ERROR : the image is not valid. string size is low or equal than 0");
     refresh = true;
   } catch(Exception e) {
@@ -264,11 +267,26 @@ void backgroundList(int n) {
   currentTracer = n;
   initCurrentPathList(currentTracer);
   refresh = true;
+  cp5.get(ScrollableList.class, "backgroundList").setLabel(s);
+  cp5.get(ScrollableList.class, "backgroundList").setValue(n);
+  cp5.get(ScrollableList.class, "backgroundList").close(); 
 }
 
 void pathList(int n) {
   currentPath = n;
-  println("currentPath = " + n);
+  //println("currentPath = " + n);
+  String s = (String)cp5.get(ScrollableList.class, "pathList").getItem(n).get("text");
+  //cp5.get(ScrollableList.class, "pathList").setLabel(s);
+  //cp5.get(ScrollableList.class, "pathList").setValue(n);
+  cp5.get(ScrollableList.class, "pathList").close();
+  
+  if(tracers.get(currentTracer).getCurrentPath() != null) {
+    int cluster = tracers.get(currentTracer).getCurrentPath().getCluster();
+    s = (String)cp5.get(ScrollableList.class, "textList").getItem(cluster).get("text");
+    cp5.get(ScrollableList.class, "textList").setLabel(s);
+    cp5.get(ScrollableList.class, "textList").setValue(cluster);
+    cp5.get(ScrollableList.class, "textList").close();
+  }
 }
 
 void textList(int n) {
@@ -277,6 +295,7 @@ void textList(int n) {
   if(s.length() > 0) {
     tracers.get(currentTracer).getCurrentPath().setClusterAndInit(n);
   }
+  
   
   
   

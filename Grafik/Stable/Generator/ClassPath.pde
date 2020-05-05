@@ -5,7 +5,7 @@ class Path {
   RPoint[] coords;
   RPoint[] upscaledCoords;
   ArrayList<Textblock> blocks = new ArrayList<Textblock>();
-  int cluster = 1; // Welche textdatei
+  int cluster = 0; // Welche textdatei
   int clusterStep = 0;
   int[] rX = new int[2];
   int[] rY = new int[2];
@@ -22,6 +22,17 @@ class Path {
   int maxLengthOfString = 0;
   
   boolean uppercase = true;
+  
+  
+  // path effects
+  /*
+    rotation per char or path
+    limit characters
+    font size
+    font weight
+    kerning
+    visible/hidden
+  */
   
   Path(RPoint[] _coords, RPoint[] _upscaled, int _spacing) {
     coords = _coords;
@@ -317,6 +328,10 @@ class Path {
   
   void setCluster(int n) {
     cluster = n;
+  }
+  
+  int getCluster() {
+    return cluster;
   }
   
   void setClusterAndInit(int n) {

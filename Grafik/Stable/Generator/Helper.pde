@@ -25,7 +25,7 @@ boolean refresh = true;
 boolean record = false;
 boolean readyToGo = false;
 boolean fullResolution = false;
-boolean showActivePath = false;
+boolean showActivePath = true;
 float partRes = 0.5; // half res 
 
 int menuHeight = 30;
@@ -197,6 +197,8 @@ void initList() {
   }
   cp5.get(ScrollableList.class, "overlayList").addItems(l);
 
+  cp5.get(ScrollableList.class, "overlayList").close();
+
   importer.loadFiles("backgrounds");
   l = new ArrayList();
   for (int i = 0; i<importer.getFiles().size(); i++) {
@@ -205,6 +207,8 @@ void initList() {
     l.add(split[split.length-1]);
   }
   cp5.get(ScrollableList.class, "backgroundList").addItems(l);
+
+  cp5.get(ScrollableList.class, "backgroundList").close();
 
   importer.loadFiles("text");
   l = new ArrayList();
@@ -217,6 +221,8 @@ void initList() {
       l.add(split[split.length-1]);
     }
     cp5.get(ScrollableList.class, "textList").addItems(l);
+ 
+    cp5.get(ScrollableList.class, "textList").close();
   }
 }
 
@@ -231,6 +237,7 @@ void initCurrentPathList(int currentTracer) {
     l.add("path " + i);
   }
   cp5.get(ScrollableList.class, "pathList").addItems(l);
+  cp5.get(ScrollableList.class, "pathList").close();
 }
 
 float[] calculateAspectRatioFit(float srcWidth, float srcHeight, float maxWidth, float maxHeight) {
