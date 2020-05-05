@@ -21,6 +21,7 @@ class Path {
   String textString = "";
   int maxLengthOfString = 0;
   
+  boolean uppercase = true;
   
   Path(RPoint[] _coords, RPoint[] _upscaled, int _spacing) {
     coords = _coords;
@@ -33,13 +34,18 @@ class Path {
     rX[1] = 0;
     rY[0] = 0;
     rY[1] = 0;
+    initText();
+      
+  }
+  
+  void initText() {
+    textString = "";
     IntList order = new IntList();
     for(int i = 0; i<blocks.size(); i++) order.append(i);
     order.shuffle();
     
-    for(int i = 0; i<blocks.size(); i++) textString += blocks.get(order.get(i)).getString() + " ";  
+    for(int i = 0; i<blocks.size(); i++) textString += blocks.get(order.get(i)).getString() + " ";
   }
-  
   void init() {
     
     for(int i = 0; i<coords.length; i++) {
@@ -211,6 +217,7 @@ class Path {
           //if(i < coords.length-1) {
             RPoint center = null;
             
+            if(uppercase) c = Character.toUpperCase(c);
             
             if(state == EXPORT) {
               center = new RCommand(upscaledCoords[i], upscaledCoords[(i+1)]).getCenter();
@@ -243,6 +250,11 @@ class Path {
             buffer[currentBuffer].textFont(myFontUpscaled[floor(size*9)]);
             buffer[currentBuffer].text(c, 0, 0);
           } else {
+            
+            preview.textFont(myFont[floor(size*9)]);
+            preview.text(c, 0, 0);
+            preview.textFont(myFont[floor(size*9)]);
+            preview.text(c, 0, 0);
             preview.textFont(myFont[floor(size*9)]);
             preview.text(c, 0, 0);
           }
@@ -301,6 +313,15 @@ class Path {
   
   RPoint[] getCoordsUpscaled() {
     return upscaledCoords;
+  }
+  
+  void setCluster(int n) {
+    cluster = n;
+  }
+  
+  void setClusterAndInit(int n) {
+    setCluster(n);
+    initText();
   }
   
 }

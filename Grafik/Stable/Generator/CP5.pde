@@ -13,7 +13,7 @@ CheckBox invertCheckbox;
 ScrollableList overlayList;
 ScrollableList backgroundList;
 ScrollableList pathList;
-//ScrollableList textList;
+ScrollableList textList;
 
 Range rangeRotationX;
 Range rangeRotationZ;
@@ -126,8 +126,14 @@ void constructGUI() {
    cp5.addButton("exportButton")
    .setValue(0)
    .setLabel("Export")
-   .setPosition(400, 5)
-   .setSize(40, 16)
+   .setPosition(width-60, 2)
+   .setSize(40, 26)
+   ;
+   cp5.addButton("activePathButton")
+   .setValue(0)
+   .setLabel("Show Active Path")
+   .setPosition(430, 2)
+   .setSize(80, 26)
    ;
    /*
    cp5.addButton("nextDemo")
@@ -141,7 +147,7 @@ void constructGUI() {
   rangeRotationX = cp5.addRange("rangeRotationX")
      // disable broadcasting since setRange and setRangeValues will trigger an event
      .setBroadcast(false) 
-     .setPosition(450,5)
+     .setPosition(750,0)
      .setSize(200,10)
      .setHandleSize(10)
      .setRange(0,360)
@@ -154,7 +160,7 @@ void constructGUI() {
    rangeRotationX = cp5.addRange("rangeRotationY")
      // disable broadcasting since setRange and setRangeValues will trigger an event
      .setBroadcast(false) 
-     .setPosition(660,5)
+     .setPosition(750,10)
      .setSize(200,10)
      .setHandleSize(10)
      .setRange(0,360)
@@ -203,6 +209,14 @@ void constructGUI() {
     .setItemHeight(20)
     .setType(ControlP5.LIST)
     .setLabel("Paths")
+    ;
+  textList = cp5.addScrollableList("textList")
+    .setPosition(317, 5)
+    .setSize(100, 400)
+    .setBarHeight(20)
+    .setItemHeight(20)
+    .setType(ControlP5.LIST)
+    .setLabel("Texts")
     ;
 
   checkImageDropdown();
@@ -257,6 +271,17 @@ void pathList(int n) {
   println("currentPath = " + n);
 }
 
+void textList(int n) {
+  String s = (String)cp5.get(ScrollableList.class, "textList").getItem(n).get("text");
+  //clusters[n];
+  if(s.length() > 0) {
+    tracers.get(currentTracer).getCurrentPath().setClusterAndInit(n);
+  }
+  
+  
+  
+}
+
 void checkImageDropdown() {
   /*
   if(overlayList != null) {
@@ -297,4 +322,8 @@ void controlEvent(ControlEvent theControlEvent) {
 
 void exportButton(int theValue) {
   if(readyToGo) setState(EXPORT);
+}
+
+void activePathButton(int theValue) {
+  if(readyToGo) showActivePath = !showActivePath;
 }

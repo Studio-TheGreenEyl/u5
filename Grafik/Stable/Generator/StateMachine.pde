@@ -22,8 +22,7 @@ void setState(int _state) {
 void stateMachine(int state) {
   
   switch(state) {
-    
-    
+
     case SETUP:
       println("→ Setup");
       // load JSON Settings
@@ -34,7 +33,6 @@ void stateMachine(int state) {
     break;
     
     case PREVIEW:
-      
       background(0);
   
       preview.beginDraw();
@@ -48,7 +46,8 @@ void stateMachine(int state) {
       }
   
       // show active path
-      if (tracers.get(currentTracer).getCurrentPath().getCoords().length > 0) {
+      if (tracers.get(currentTracer).getCurrentPath().getCoords().length > 0 && showActivePath) {
+        
         active.beginDraw();
         active.clear();
         active.strokeWeight(4);
@@ -64,6 +63,7 @@ void stateMachine(int state) {
         active.pop();
         active.endDraw();
         image(active, 0, menuHeight, width, height-menuHeight);
+        
       }
   
       showOverlay();

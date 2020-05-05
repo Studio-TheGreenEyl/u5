@@ -25,6 +25,7 @@ boolean refresh = true;
 boolean record = false;
 boolean readyToGo = false;
 boolean fullResolution = false;
+boolean showActivePath = false;
 float partRes = 0.5; // half res 
 
 int menuHeight = 30;
@@ -41,8 +42,9 @@ PFont myFont[] = new PFont[9];
 PFont myFontUpscaled[] = new PFont[9];
 String fontname = "Theinhardt";
 String suffix = "Ita";
-int fontSize = 40;
+int fontSize = 14;
 int fontScaling = 4;
+float fontScaling2 = 15.44;
 float kerning = 1.0;
 
 int state = SETUP;
@@ -103,7 +105,7 @@ void init() {
   surface.setLocation(0, 0);
 
 
-  float[] aspect = calculateAspectRatioFit(setWidth, setHeight, 2480, 720);
+  float[] aspect = calculateAspectRatioFit(setWidth, setHeight, 2480, 720+menuHeight);
   //surface.setSize((int)aspect[0], (int)aspect[1]+menuHeight);
   //surface.setResizable(true);
 
@@ -130,22 +132,22 @@ void init() {
   myFont[7] = createFont(fontname+"-Heavy"+suffix, fontSize);
   myFont[8] = createFont(fontname+"-Black"+suffix, fontSize);
   
-  myFontUpscaled[0] = createFont(fontname+"-Hairline"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[1] = createFont(fontname+"-Ultralight"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[2] = createFont(fontname+"-Thin"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[3] = createFont(fontname+"-Light"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[4] = createFont(fontname+"-Regular"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[5] = createFont(fontname+"-Medium"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[6] = createFont(fontname+"-Bold"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[7] = createFont(fontname+"-Heavy"+suffix, int(fontSize*fontScaling));
-  myFontUpscaled[8] = createFont(fontname+"-Black"+suffix, int(fontSize*fontScaling));
+  myFontUpscaled[0] = createFont(fontname+"-Hairline"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[1] = createFont(fontname+"-Ultralight"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[2] = createFont(fontname+"-Thin"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[3] = createFont(fontname+"-Light"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[4] = createFont(fontname+"-Regular"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[5] = createFont(fontname+"-Medium"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[6] = createFont(fontname+"-Bold"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[7] = createFont(fontname+"-Heavy"+suffix, int(fontSize*fontScaling2));
+  myFontUpscaled[8] = createFont(fontname+"-Black"+suffix, int(fontSize*fontScaling2));
 
   textFont(myFont[4]);
-  textSize(scaleFactor);
+  textSize(fontSize);
   for(int i = 0; i<segments.length; i++) {
     buffer[i].beginDraw();
     buffer[i].textFont(myFontUpscaled[4]);
-    buffer[i].textSize(int(fontSize*fontScaling));
+    buffer[i].textSize(int(fontSize*fontScaling2));
     buffer[i].endDraw();
   }
   
@@ -205,11 +207,16 @@ void initList() {
   cp5.get(ScrollableList.class, "backgroundList").addItems(l);
 
   importer.loadFiles("text");
+  l = new ArrayList();
   if (importer.getFiles().size() > 0) {
     clusters = new String[importer.getFiles().size()][];
     for (int i = 0; i<importer.getFiles().size(); i++) {
       clusters[i] = loadStrings(importer.getFiles().get(i));
+      String s = importer.getFiles().get(i);
+      String[] split = split(s, "/");
+      l.add(split[split.length-1]);
     }
+    cp5.get(ScrollableList.class, "textList").addItems(l);
   }
 }
 
