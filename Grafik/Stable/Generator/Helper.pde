@@ -45,6 +45,8 @@ int polygonizerLength = 20;
 int exportFrame = 0;
 
 // FONTS
+ArrayList<PFont[][]> fontMaster = new ArrayList<PFont[][]>();
+//ArrayList<ArrayList<PFont[]>> fontMaster = new ArrayList<ArrayList<PFont[]>>();
 ArrayList<PFont> myFont = new ArrayList<PFont>();
 ArrayList<PFont>  myFontUpscaled = new ArrayList<PFont>();
 //String fontname = "Theinhardt";
@@ -70,7 +72,9 @@ String[] fontSet = {
 
 int[] fontSizes = {
   148,
-  295
+  295,
+  500,
+  800
 };
 
 void keyPressed() {
@@ -146,6 +150,25 @@ void init() {
   //importer[1] = new Importer("data/backgrounds");
   //importer[2] = new Importer("data/text");
   
+  // size array
+  
+  
+  //ArrayList<PFont[][]> fontMaster = new ArrayList<PFont[][]>();
+  for(int i = 0; i<fontSet.length; i++) {
+    fontMaster.add(new PFont[2][fontSizes.length]);
+    for(int k = 0; k<2; k++) {
+      for(int j = 0; j<fontSizes.length; j++) {
+        fontMaster.get(i)[k][j] = createFont(fontSet[i], fontSizes[j]); 
+      }
+    }
+  }
+  
+  // get = fontFace
+  // [0 / 1] down / up
+  // [0 - n] fontSize
+  //printArray(fontMaster.get(0)[0][0]);
+  
+  
   for(int i = 0; i<fontSet.length; i++) {
     myFont.add(createFont(fontSet[i], fontSize));
     myFontUpscaled.add(createFont(fontSet[i], int(fontSize*fontScaling2)));
@@ -169,6 +192,24 @@ void init() {
   readyToGo = true;
   initCurrentPathList(currentTracer);
 }
+
+PFont getFontFaceMaster(int fontFace, boolean upscaled, int fontSize) {
+  //println(getFontSizeMaster(fontSize));
+  return fontMaster.get(fontFace)[(upscaled?0:1)][getFontSizeMaster(fontSize)];
+}
+
+int getFontSizeMaster(int i) {
+  for(int k = 0; k<fontSizes.length; k++) {
+    if(fontSizes[k] == i) {
+      return k;
+      
+    }
+  }
+  return -1;
+  //return fontSizes[i];
+}
+
+
 
 void export() {
   if (readyToGo) {

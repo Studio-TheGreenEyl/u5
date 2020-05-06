@@ -9,7 +9,7 @@ class Path {
   int clusterStep = 0;
   int[] rX = new int[2];
   int[] rY = new int[2];
-  float[] fontSizes = new float[2];
+  float[] fontSizeArray = new float[2];
 
 
   float startScale = 0;
@@ -66,6 +66,7 @@ class Path {
     indexOffsetFloat = 0;
     
     fontFace = fontStandard;
+    fontSize = fontSizes[0];
   }
 
    
@@ -290,10 +291,16 @@ class Path {
             else preview.rotateZ(getAngle(coords[i], coords[i+1]));
           }
           if (state == EXPORT) {
-            buffer[currentBuffer].textFont(myFontUpscaled.get(fontFace));
+            buffer[currentBuffer].textFont(getFontFaceMaster(fontFace, true, fontSize));
+            //buffer[currentBuffer].textFont(myFontUpscaled.get(fontFace));
+            //buffer[currentBuffer].textSize(fontSize);
+            buffer[currentBuffer].textSize(fontSize);
             buffer[currentBuffer].text(c, 0, 0);
           } else {
-            preview.textFont(myFont.get(fontFace));
+            preview.textFont(getFontFaceMaster(fontFace, false, fontSize));
+            preview.textSize(fontSize);
+            //preview.textFont(myFont.get(fontFace));
+            //preview.textSize(fontSize);
             // draw text fatter on screen
             for (int j = 0; j<3; j++) {
               preview.text(c, 0, 0);
@@ -343,8 +350,8 @@ class Path {
     /*rX[0] = (int)map(a, 0f, 1f, 0, 360);
      rX[1] = (int)map(b, 0f, 1f, 0, 360);
      */
-    fontSizes[0] = a;
-    fontSizes[1] = b;
+    fontSizeArray[0] = a;
+    fontSizeArray[1] = b;
   }
 
   void setFontFace(int n) {

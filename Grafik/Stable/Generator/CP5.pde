@@ -324,13 +324,13 @@ void fontSizeList(int n) {
   //clusters[n];
     if (k > 0) {
       if(!globalFontSize) {
-        tracers.get(currentTracer).getCurrentPath().setFontSize(n);
+        tracers.get(currentTracer).getCurrentPath().setFontSize(k);
       } else {
         Tracer t = tracers.get(currentTracer);
         if (t.getPathCount() > 0) {
           for (int i = 0; i<t.getPathCount(); i++) {
             Path p = t.getThisPath(i);
-            p.setFontSize(n);
+            p.setFontSize(k);
           }
         }
       }
