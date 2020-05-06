@@ -1,9 +1,6 @@
 /.DS_Store
 *.psd
 .DS_Store
-/Grafik/Stable/Generator/data/backgrounds/testPfad05.svg
-/Grafik/Stable/Generator/data/backgrounds/testPfad3.svg
-/Grafik/Stable/Generator/data/backgrounds/testPfad4.svg
-/Grafik/Stable/Generator/export/output.png
+/Grafik/Stable/Generator/data/backgrounds/*
 Grafik/Stable/Generator/export/*
 Grafik/Stable/Generator/data/backgrounds/*
