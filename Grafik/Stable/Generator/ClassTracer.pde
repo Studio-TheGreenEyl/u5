@@ -105,5 +105,9 @@ class Tracer {
   Path getCurrentPath() {
     return paths.get(currentPath);
   }
+  
+  Path getThisPath(int n) {
+    return paths.get(n);
+  }
 
 }

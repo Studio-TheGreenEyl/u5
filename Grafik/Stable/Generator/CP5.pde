@@ -7,7 +7,7 @@ Textlabel inputLabel;
 Textlabel brightnessInPercLabel;
 CheckBox rotModeX;
 CheckBox rotModeY;
-CheckBox rotateCheckbox;
+CheckBox globalTextsCheckbox;
 CheckBox redrawCheckbox;
 CheckBox invertCheckbox;
 ScrollableList overlayList;
@@ -109,12 +109,13 @@ void constructGUI() {
    .setSize(16, 16)
    .addItem("rotate mode Y", 1)
    ;
-   /*
-   rotateCheckbox = cp5.addCheckBox("rotateCheckbox")
-   .setPosition(14, 50)
-   .setSize(32, 8)
-   .addItem("rotate", 1)
+   
+   globalTextsCheckbox = cp5.addCheckBox("globalTextsCheckbox")
+   .setPosition(430, 30)
+   .setSize(16, 16)
+   .addItem("global text file", 1)
    ;
+   /*
    redrawCheckbox = cp5.addCheckBox("redrawCheckbox")
    .setPosition(14, 60)
    .setSize(32, 8)
@@ -307,7 +308,21 @@ void textList(int n) {
   String s = (String)cp5.get(ScrollableList.class, "textList").getItem(n).get("text");
   //clusters[n];
   if(s.length() > 0) {
-    tracers.get(currentTracer).getCurrentPath().setClusterAndInit(n);
+    if(!globalTexts) {
+      tracers.get(currentTracer).getCurrentPath().setClusterAndInit(n);
+    } else {
+      
+        Tracer t = tracers.get(currentTracer);
+        if(t.getPathCount() > 0) {
+          for(int i = 0; i<t.getPathCount(); i++) {
+            Path p = t.getThisPath(i);
+            p.setClusterAndInit(n);
+            
+          }
+        }
+        
+      
+    }
   }
 }
 
@@ -395,4 +410,12 @@ void rotModeYCheckbox(float[] a) {
     }
   }
   
+}
+
+void globalTextsCheckbox(float[] a) {
+  if(readyToGo) {
+    boolean b = false;
+    if (a[0] == 1f) globalTexts = true;
+    else globalTexts = false;
+  }
 }

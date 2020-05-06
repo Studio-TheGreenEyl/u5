@@ -26,6 +26,7 @@ boolean record = false;
 boolean readyToGo = false;
 boolean fullResolution = false;
 boolean showActivePath = true;
+boolean globalTexts = false;
 
 float partRes = 0.5; // half res
 

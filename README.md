@@ -21,12 +21,13 @@ http://louisc.co.uk/?p=2686
 - [x] Paths from Illustrator into ArrayList or Geomerative RPoints Array
 - [x] Homogenous paths with equi-distances
 - [x] Bind path to cluster (Color)
-- [ ] Bend text per character (atan2)
+- [x] Bend text per character (atan2)
 - [ ] Segments per path
-- [ ] Rotation, scaling per path
+- [ ] Rotation per path
+- [ ] Scaling per path
 - [ ] lerp between two endpoints
-- [/] Export to PDF / Vector
-- [/] Export to huge ass png
+- [ ] Export to PDF / Vector
+- [x] Export to huge ass png
 - [x] SVG 1.0 compatibility
 - [ ] Drag & Drop (SDrop) ?
 - [ ] Change text positions (???)

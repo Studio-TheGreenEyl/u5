@@ -208,13 +208,6 @@ class Path {
       int offsetKern = 0;
       int characterStep = 0;
       
-      if(rotModeX) {
-        //preview.rotateX(radians(int(rX[1])));
-        println(rX[1]);
-      }
-      if(rotModeY) {
-        //preview.rotateY(radians(int(rY[1])));
-      }
       for(int i = 0; i<cutoff-1; i++) {
         float xR = map(i, 0, coords.length, rX[0], rX[1]);
         float yR = map(i, 0, coords.length, rY[0], rY[1]);
