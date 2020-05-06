@@ -294,11 +294,11 @@ class Path {
             buffer[currentBuffer].textFont(getFontFaceMaster(fontFace, true, fontSize));
             //buffer[currentBuffer].textFont(myFontUpscaled.get(fontFace));
             //buffer[currentBuffer].textSize(fontSize);
-            buffer[currentBuffer].textSize(fontSize);
+            buffer[currentBuffer].textSize(getFontSizeMaster(fontSize, true));
             buffer[currentBuffer].text(c, 0, 0);
           } else {
             preview.textFont(getFontFaceMaster(fontFace, false, fontSize));
-            preview.textSize(fontSize);
+            preview.textSize(getFontSizeMaster(fontSize, false));
             //preview.textFont(myFont.get(fontFace));
             //preview.textSize(fontSize);
             // draw text fatter on screen

@@ -158,6 +158,8 @@ void init() {
     fontMaster.add(new PFont[2][fontSizes.length]);
     for(int k = 0; k<2; k++) {
       for(int j = 0; j<fontSizes.length; j++) {
+        int scale = fontSizes[j];
+        if(k == 0) scale = int(fontSizes[j]*0.0645); 
         fontMaster.get(i)[k][j] = createFont(fontSet[i], fontSizes[j]); 
       }
     }
@@ -195,18 +197,23 @@ void init() {
 
 PFont getFontFaceMaster(int fontFace, boolean upscaled, int fontSize) {
   //println(getFontSizeMaster(fontSize));
-  return fontMaster.get(fontFace)[(upscaled?0:1)][getFontSizeMaster(fontSize)];
+  return fontMaster.get(fontFace)[(upscaled?0:1)][getFontSizeIndexMaster(fontSize)];
 }
 
-int getFontSizeMaster(int i) {
+int getFontSizeMaster(int fontSize, boolean upscaled) {
+  int i = getFontSizeIndexMaster(fontSize);
+  int scale = fontSizes[i];
+  if(!upscaled) scale = int(fontSizes[i]*0.0645);
+  return scale;
+}
+
+int getFontSizeIndexMaster(int i) {
   for(int k = 0; k<fontSizes.length; k++) {
     if(fontSizes[k] == i) {
       return k;
-      
     }
   }
   return -1;
-  //return fontSizes[i];
 }
 
 
