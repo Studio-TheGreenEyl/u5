@@ -27,6 +27,8 @@ boolean readyToGo = false;
 boolean fullResolution = false;
 boolean showActivePath = true;
 boolean globalTexts = false;
+boolean globalFontFace = false;
+boolean globalFontSize = false;
 
 float partRes = 0.5; // half res
 
@@ -42,17 +44,34 @@ int polygonizerLength = 20;
 
 int exportFrame = 0;
 
-// fonts
-PFont myFont[] = new PFont[9];
-PFont myFontUpscaled[] = new PFont[9];
-String fontname = "Theinhardt";
-String suffix = "Ita";
+// FONTS
+ArrayList<PFont> myFont = new ArrayList<PFont>();
+ArrayList<PFont>  myFontUpscaled = new ArrayList<PFont>();
+//String fontname = "Theinhardt";
+//String suffix = "Ita";
 int fontSize = 14;
 int fontScaling = 4;
 float fontScaling2 = 15.44;
 float kerning = 1.0;
+int fontStandard = 5;
 
-int state = SETUP;
+String[] fontSet = {
+  "Theinhardt-HairlineIta",
+  "Theinhardt-UltralightIta",
+  "Theinhardt-ThinIta",
+  "Theinhardt-LightIta",
+  "Theinhardt-RegularIta",
+  "Theinhardt-MediumIta",
+  "Theinhardt-BoldIta",
+  "Theinhardt-HeavyIta",
+  "Theinhardt-BlackIta"
+};
+
+
+int[] fontSizes = {
+  148,
+  295
+};
 
 void keyPressed() {
   if (key == CODED) {
@@ -126,38 +145,24 @@ void init() {
 
   //importer[1] = new Importer("data/backgrounds");
   //importer[2] = new Importer("data/text");
-
-  myFont[0] = createFont(fontname+"-Hairline"+suffix, fontSize);
-  myFont[1] = createFont(fontname+"-Ultralight"+suffix, fontSize);
-  myFont[2] = createFont(fontname+"-Thin"+suffix, fontSize);
-  myFont[3] = createFont(fontname+"-Light"+suffix, fontSize);
-  myFont[4] = createFont(fontname+"-Regular"+suffix, fontSize);
-  myFont[5] = createFont(fontname+"-Medium"+suffix, fontSize);
-  myFont[6] = createFont(fontname+"-Bold"+suffix, fontSize);
-  myFont[7] = createFont(fontname+"-Heavy"+suffix, fontSize);
-  myFont[8] = createFont(fontname+"-Black"+suffix, fontSize);
   
-  myFontUpscaled[0] = createFont(fontname+"-Hairline"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[1] = createFont(fontname+"-Ultralight"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[2] = createFont(fontname+"-Thin"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[3] = createFont(fontname+"-Light"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[4] = createFont(fontname+"-Regular"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[5] = createFont(fontname+"-Medium"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[6] = createFont(fontname+"-Bold"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[7] = createFont(fontname+"-Heavy"+suffix, int(fontSize*fontScaling2));
-  myFontUpscaled[8] = createFont(fontname+"-Black"+suffix, int(fontSize*fontScaling2));
+  for(int i = 0; i<fontSet.length; i++) {
+    myFont.add(createFont(fontSet[i], fontSize));
+    myFontUpscaled.add(createFont(fontSet[i], int(fontSize*fontScaling2)));
+  }
 
-  textFont(myFont[4]);
+
+  textFont(myFont.get(fontStandard));
   textSize(fontSize);
   for(int i = 0; i<segments.length; i++) {
     buffer[i].beginDraw();
-    buffer[i].textFont(myFontUpscaled[4]);
+    buffer[i].textFont(myFontUpscaled.get(fontStandard));
     buffer[i].textSize(int(fontSize*fontScaling2));
     buffer[i].endDraw();
   }
   
   preview.beginDraw();
-  preview.textFont(myFont[4]);
+  preview.textFont(myFont.get(fontStandard));
   preview.textSize(fontSize);
   preview.endDraw();
 
@@ -192,6 +197,7 @@ void showOverlay() {
 void initList() {
   List l = new ArrayList();
 
+  // OVERLAYS
   importer.loadFiles("overlays");
   l = new ArrayList();
   l.add("empty");
@@ -201,9 +207,9 @@ void initList() {
     l.add(split[split.length-1]);
   }
   cp5.get(ScrollableList.class, "overlayList").addItems(l);
-
   cp5.get(ScrollableList.class, "overlayList").close();
 
+  // BACKGROUNDS
   importer.loadFiles("backgrounds");
   l = new ArrayList();
   for (int i = 0; i<importer.getFiles().size(); i++) {
@@ -212,9 +218,9 @@ void initList() {
     l.add(split[split.length-1]);
   }
   cp5.get(ScrollableList.class, "backgroundList").addItems(l);
-
   cp5.get(ScrollableList.class, "backgroundList").close();
 
+  // TEXT FILES
   importer.loadFiles("text");
   l = new ArrayList();
   if (importer.getFiles().size() > 0) {
@@ -226,8 +232,27 @@ void initList() {
       l.add(split[split.length-1]);
     }
     cp5.get(ScrollableList.class, "textList").addItems(l);
- 
     cp5.get(ScrollableList.class, "textList").close();
+  }
+  
+  // FONT FACES
+  l = new ArrayList();
+  if(fontSet.length > 0) {
+    for(int i = 0; i<fontSet.length; i++) {
+      l.add(fontSet[i]);
+    }
+    cp5.get(ScrollableList.class, "fontFaceList").addItems(l);
+    cp5.get(ScrollableList.class, "fontFaceList").close();
+  }
+  
+  // FONT SIZES
+  l = new ArrayList();
+  if(fontSet.length > 0) {
+    for(int i = 0; i<fontSizes.length; i++) {
+      l.add(str(fontSizes[i]));
+    }
+    cp5.get(ScrollableList.class, "fontSizeList").addItems(l);
+    cp5.get(ScrollableList.class, "fontSizeList").close();
   }
 }
 

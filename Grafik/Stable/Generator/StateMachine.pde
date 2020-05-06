@@ -2,7 +2,7 @@ static final int SETUP = 0;
 static final int PREVIEW = 1;
 static final int EXPORT = 2;
 
-
+int state = SETUP;
 
 static final String[] stateNames = {
   "Video Loop", "Atmen", "Lichtstreifen", 
