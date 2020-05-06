@@ -51,11 +51,13 @@ class Path {
     spacing = _spacing;
     initBlocks();
     clusterStep = (int)random(clusters[clusterStep].length-1);
+    
     println("Path created");
     rX[0] = 0;
     rX[1] = 0;
     rY[0] = 0;
     rY[1] = 0;
+    indexOffsetFloat = random(0f, 1f);
     initText();
     //shuffleText();
 
